@@ -820,7 +820,338 @@ function createModel(name, schemaDefaults = {}, options = {}) {
         }
     }
 
+    Model._engine = engine;
+
     return Model;
+}
+
+const defChat = {
+    isBanned: false,
+    welcome: false,
+    goodbye: false,
+    sWelcome: '',
+    sGoodbye: '',
+    nsfw: false,
+    antinsfw: false,
+    alerts: false,
+    gacha: true,
+    economy: true,
+    adminonly: false,
+    antitoxic: false,
+    primaryBot: null,
+    antilinks: false,
+    antistatus: false,
+    autoresponder: false,
+    rolls: () => ({}),
+    wimage: () => ({})
+};
+
+const defUser = {
+    monedas: 0,
+    marry: null,
+    name: 'Usuario',
+    exp: 0,
+    warnAntiLink: 0,
+    col: 0,
+    banned: false,
+    lastSeen: () => new Date(),
+    gender: 'No definido',
+    identity: 'No definido',
+    age: 0,
+    description: '',
+    repPoints: 0,
+    repGivenBy: () => []
+};
+
+const defChatUser = {
+    coins: 0,
+    bank: 0,
+    lastCmd: 0,
+    usedTime: null,
+    health: 100,
+    stamina: 100,
+    magic: 100,
+    characters: () => [],
+    stats: () => ({})
+};
+
+const defSettings = {
+    self: false,
+    prefix: () => ['#'],
+    commandsejecut: 0,
+    newsletter_id: '120363399914074176@newsletter',
+    nameid: 'Kaede',
+    type: 'Owner',
+    botprem: false,
+    botmod: false,
+    link: 'https://whatsapp.com/channel/0029VbB1ujH8qIzjgU3Vul1l',
+    banner: 'https://files.catbox.moe/qupb5s.jpg',
+    icon: 'https://files.catbox.moe/qupb5s.jpg',
+    currency: 'Yenes',
+    namebot: 'Columbina',
+    botname: 'Columbina',
+    owner: ''
+};
+
+const defStickerPack = {
+    packs: () => []
+};
+
+const defCharacter = {};
+
+function migrateDefaults(engine, defaults) {
+    let changed = false;
+    for (const [key, raw] of engine.store.map) {
+        const doc = JSON.parse(raw);
+        let docChanged = false;
+        for (const field in defaults) {
+            if (doc[field] === undefined) {
+                const def = defaults[field];
+                doc[field] = typeof def === 'function' ? def() : def;
+                docChanged = true;
+            }
+        }
+        if (docChanged) {
+            engine.store.set(key, JSON.stringify(doc));
+            changed = true;
+        }
+    }
+    if (changed) engine._compactSync();
+}
+
+function getChatUser(chatId, userId, opt = {}) {
+    const engine = global.ChatUser._engine;
+    if (!chatId) {
+        return engine._findSync({});
+    }
+    if (chatId && !userId) {
+        const all = engine._findSync({ chatId });
+        if (opt.orderBy) {
+            const allowed = ['coins', 'bank', 'lastCmd', 'usedTime', 'health', 'stamina', 'magic'];
+            if (!allowed.includes(opt.orderBy)) throw new Error('Columna no permitida');
+            all.sort((a, b) => {
+                const av = a[opt.orderBy], bv = b[opt.orderBy];
+                const cmp = av > bv ? 1 : av < bv ? -1 : 0;
+                return opt.desc === false ? cmp : -cmp;
+            });
+        }
+        if (opt.limit) return all.slice(0, opt.limit);
+        return all;
+    }
+    let cu = engine._findOneSync({ chatId, userId });
+    if (!cu) cu = engine._createSync({ chatId, userId });
+    return cu;
+}
+
+function setChatUser(chatId, userId, field, val) {
+    const engine = global.ChatUser._engine;
+    let cu = engine._findOneSync({ chatId, userId });
+    if (!cu) {
+        engine._createSync({ chatId, userId, [field]: val });
+        return true;
+    }
+    cu[field] = val;
+    engine._put(cu);
+    return true;
+}
+
+function getCharacter(id) {
+    const engine = global.Character._engine;
+    if (!id) {
+        const out = {};
+        for (const raw of engine.store.map.values()) {
+            const doc = JSON.parse(raw);
+            out[doc.id] = doc;
+        }
+        return out;
+    }
+    return engine._findOneSync({ id });
+}
+
+function setCharacter(id, data) {
+    const engine = global.Character._engine;
+    const existing = engine._findOneSync({ id });
+    engine._put({ ...(existing || {}), ...data, id });
+    return true;
+}
+
+function getChat(id) {
+    const engine = global.Chat._engine;
+    if (!id) return engine._findSync({});
+    let chat = engine._findOneSync({ id });
+    if (!chat) chat = engine._createSync({ id });
+    return chat;
+}
+
+function setChat(id, field, val) {
+    const engine = global.Chat._engine;
+    let chat = engine._findOneSync({ id });
+    if (!chat) {
+        engine._createSync({ id, [field]: val });
+        return true;
+    }
+    chat[field] = val;
+    engine._put(chat);
+    return true;
+}
+
+function getSettings(id) {
+    const engine = global.Settings._engine;
+    if (!id) return engine._findSync({});
+    let row = engine._findOneSync({ id });
+    if (!row) row = engine._createSync({ id });
+    return row;
+}
+
+function setSettings(id, field, val) {
+    const engine = global.Settings._engine;
+    let row = engine._findOneSync({ id });
+    if (!row) {
+        engine._createSync({ id, [field]: val });
+        return true;
+    }
+    row[field] = val;
+    engine._put(row);
+    return true;
+}
+
+function getStickersPack(id) {
+    const engine = global.StickerPack._engine;
+    if (!id) return engine._findSync({});
+    let pack = engine._findOneSync({ id });
+    if (!pack) pack = engine._createSync({ id });
+    return pack;
+}
+
+function setStickersPack(id, field, val) {
+    const engine = global.StickerPack._engine;
+    let pack = engine._findOneSync({ id });
+    if (!pack) {
+        engine._createSync({ id, [field]: val });
+        return true;
+    }
+    pack[field] = val;
+    engine._put(pack);
+    return true;
+}
+
+function deletedb(type, ...ids) {
+    if (!type || !ids || ids.length === 0) return false;
+    switch (type) {
+        case 'user': {
+            const engine = global.User._engine;
+            const existing = engine._findOneSync({ id: ids[0] });
+            if (!existing) return false;
+            engine._deleteOneSync({ id: ids[0] });
+            return true;
+        }
+        case 'chat': {
+            const engine = global.Chat._engine;
+            const existing = engine._findOneSync({ id: ids[0] });
+            if (!existing) return false;
+            engine._deleteOneSync({ id: ids[0] });
+            return true;
+        }
+        case 'chatuser': {
+            if (ids.length < 2) return false;
+            const engine = global.ChatUser._engine;
+            const existing = engine._findOneSync({ chatId: ids[0], userId: ids[1] });
+            if (!existing) return false;
+            engine._deleteOneSync({ chatId: ids[0], userId: ids[1] });
+            return true;
+        }
+        case 'character': {
+            const engine = global.Character._engine;
+            const existing = engine._findOneSync({ id: ids[0] });
+            if (!existing) return false;
+            engine._deleteOneSync({ id: ids[0] });
+            return true;
+        }
+        case 'settings': {
+            const engine = global.Settings._engine;
+            const existing = engine._findOneSync({ id: ids[0] });
+            if (!existing) return false;
+            engine._deleteOneSync({ id: ids[0] });
+            return true;
+        }
+        case 'stickerpack': {
+            const engine = global.StickerPack._engine;
+            const existing = engine._findOneSync({ id: ids[0] });
+            if (!existing) return false;
+            engine._deleteOneSync({ id: ids[0] });
+            return true;
+        }
+        default: return false;
+    }
+}
+
+function setCreate(table, identifier, field, value) {
+    const tableMap = {
+        users: () => global.User,
+        chats: () => global.Chat,
+        chat_users: () => global.ChatUser,
+        settings: () => global.Settings,
+        characters: () => global.Character,
+        sticker_packs: () => global.StickerPack
+    };
+    if (!tableMap[table]) throw new Error(`Tabla '${table}' no soportada`);
+    const engine = tableMap[table]()._engine;
+
+    if (table === 'chat_users') {
+        if (!Array.isArray(identifier) || identifier.length < 2) throw new Error('chat_users requiere [chatId, userId]');
+        const [chatId, userId] = identifier;
+        let record = engine._findOneSync({ chatId, userId });
+        if (!record) {
+            engine._createSync({ chatId, userId, [field]: value });
+            return value;
+        }
+        if (record[field] === undefined) {
+            record[field] = value;
+            engine._put(record);
+            return value;
+        }
+        return record[field];
+    }
+
+    let record = engine._findOneSync({ id: identifier });
+    if (!record) {
+        engine._createSync({ id: identifier, [field]: value });
+        return value;
+    }
+    if (record[field] === undefined) {
+        record[field] = value;
+        engine._put(record);
+        return value;
+    }
+    return record[field];
+}
+
+function clearCache() {
+    return true;
+}
+
+function clearDB() {
+    if (!global.cleardb) {
+        global.cleardb = true;
+        const INACTIVE_MS = 20 * 86400000;
+        setInterval(() => {
+            try {
+                const engine = global.ChatUser._engine;
+                const now = Date.now();
+                const toDelete = [];
+                for (const [key, raw] of engine.store.map) {
+                    const cu = JSON.parse(raw);
+                    const last = cu.lastCmd > 0 ? cu.lastCmd : (cu.usedTime ? new Date(cu.usedTime).getTime() : 0);
+                    if (last === 0 || now - last > INACTIVE_MS) {
+                        toDelete.push({ chatId: cu.chatId, userId: cu.userId });
+                    }
+                }
+                for (const filter of toDelete) {
+                    engine._deleteOneSync(filter);
+                }
+            } catch (_) {}
+        }, 86400000).unref?.();
+    }
 }
 
 class DatabaseManager {
@@ -831,9 +1162,8 @@ class DatabaseManager {
 
     async init() {
         try {
-            global.Chat = createModel('chats', {
-                isBanned: false
-            }, { primaryKey: 'id' });
+            global.Chat = createModel('chats', defChat, { primaryKey: 'id' });
+            migrateDefaults(global.Chat._engine, defChat);
 
             global.Warns = createModel('warns', {
                 reasons: () => [],
@@ -841,26 +1171,24 @@ class DatabaseManager {
                 date: () => new Date()
             }, { primaryKey: 'id', uniqueFields: ['userId', 'groupId'] });
 
-            global.User = createModel('users', {
-                monedas: 0,
-                marry: null,
-                name: 'Usuario',
-                exp: 0,
-                warnAntiLink: 0,
-                col: 0,
-                banned: false,
-                lastSeen: () => new Date(),
-                gender: 'No definido',
-                identity: 'No definido',
-                age: 0,
-                description: '',
-                repPoints: 0,
-                repGivenBy: () => []
-            }, { primaryKey: 'id' });
+            global.User = createModel('users', defUser, { primaryKey: 'id' });
+            migrateDefaults(global.User._engine, defUser);
+
+            global.ChatUser = createModel('chat_users', defChatUser, { primaryKey: 'id', uniqueFields: ['chatId', 'userId'] });
+            migrateDefaults(global.ChatUser._engine, defChatUser);
+
+            global.Character = createModel('characters', defCharacter, { primaryKey: 'id' });
+
+            global.Settings = createModel('settings', defSettings, { primaryKey: 'id' });
+            migrateDefaults(global.Settings._engine, defSettings);
+
+            global.StickerPack = createModel('sticker_packs', defStickerPack, { primaryKey: 'id' });
+            migrateDefaults(global.StickerPack._engine, defStickerPack);
 
             this.db = { stores };
             global.db = this.db;
             this.startGarbageCollector();
+            clearDB();
             console.log('┃ SYSTEM ┃ Conectado con éxito a la base de datos local.');
         } catch (e) {
             console.error('┃ SYSTEM ERROR ┃ Error al conectar con la base de datos local:', e);
@@ -909,6 +1237,7 @@ class DatabaseManager {
                 console.error('┃ SYSTEM ERROR ┃ Error en recolector de basura de la base de datos:', e);
             }
         }, 1000 * 60 * 60 * 2);
+        this.gc.unref?.();
     }
 
     async close() {
@@ -920,6 +1249,28 @@ class DatabaseManager {
 }
 
 export const databaseManager = new DatabaseManager();
+
+export {
+    defChat,
+    defUser,
+    defChatUser,
+    defSettings,
+    defStickerPack,
+    getChatUser,
+    setChatUser,
+    getCharacter,
+    setCharacter,
+    getChat,
+    setChat,
+    getSettings,
+    setSettings,
+    getStickersPack,
+    setStickersPack,
+    deletedb,
+    setCreate,
+    clearCache,
+    clearDB
+};
 
 process.on('exit', flushAllSync);
 process.on('SIGINT', async () => { await databaseManager.close(); process.exit(0); });

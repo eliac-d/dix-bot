@@ -18,7 +18,7 @@ export const setBotProfileCommand = {
                 try {
                     let media = await q.download();
                     let botJid = conn.user.jid || conn.user.id;
-                    
+
                     await conn.updateProfilePicture(botJid, media);
                     await m.react("✅");
 

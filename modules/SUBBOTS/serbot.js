@@ -155,8 +155,8 @@ Puedes apoyar realizando una donación o contribución voluntaria para ayudarnos
 
                         const botonesUnificados = [
                             { text: 'Copiar Código', copy: code },
-                            { text: 'Términos', id: `${usedPrefix}terminos` },
-                            { text: 'Subbots', webview: 'https://dix.lat/katsuki' }
+                            { text: 'Términos', id: `${usedPrefix}terminos` }/*,
+                            { text: 'Subbots', webview: 'https://dix.lat/katsuki' }*/
                         ];
 
                         const opcionesUnificadas = {

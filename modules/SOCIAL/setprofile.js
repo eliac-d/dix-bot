@@ -61,8 +61,8 @@ export const socialConfig = {
             }
         },
         setdesc: {
-            name: 'setdesc',
-            alias: ['setdesc', 'setbiografia'],
+            name: 'setdesc2',
+            alias: ['setdesc2', 'setbiografia'],
             run: async (m, { conn, text, usedPrefix, command }) => {
                 const realJid = await getRealJid(conn, m.sender, m).catch(() => m.sender);
                 if (!realJid || typeof realJid !== 'string') return conn.reply(m.chat, '> Error: No se pudo identificar tu ID.', m);

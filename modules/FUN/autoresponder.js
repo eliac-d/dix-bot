@@ -1,8 +1,7 @@
 export const autoResponderModule = {
     commands: {
         autoresponder_pro: {
-            name: 'autoresponder',
-            alias: [],
+            
             async before(m, { conn, chat, channelInfo }) {
                 try {
                     if (!m.isGroup || !chat?.autoresponder) return false;

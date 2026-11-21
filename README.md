@@ -3,37 +3,72 @@
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://dix.lat/logo.svg?788">
   <source media="(prefers-color-scheme: light)" srcset="https://cdn.dix.lat/me/0lkj_20260829-c91x-2p9h-f407.png">
-  <img src="https://cdn.dix.lat/me/0lkj_20260829-c91x-2p9h-f407.png" alt="Katsuki MD" width="276" height="auto" style="width: 276px; height: auto;">
+  <img src="https://cdn.dix.lat/me/0lkj_20260829-c91x-2p9h-f407.png" alt="Kiriti-Bot-MD" width="276">
 </picture>
 
+<br/>
+<br/>
 
-# Katsuki MD
+# Kiriti-Bot-MD
 
-**Bot de WhatsApp en Node.js.** Instalación en Android, servidores, VM y contenedores.
+**Bot de WhatsApp en Node.js, rápido, ligero y listo para correr 24/7.**
+<br/>
+Instálalo en tu celular Android, un servidor, una VM o un contenedor en minutos.
 
-<p>
-  <a href="https://github.com/eliac-d/Katsuki-bot/stargazers"><img src="https://img.shields.io/github/stars/eliac-d/Katsuki-bot?style=for-the-badge&logo=github&logoColor=white&color=7c5cff" alt="Stars"></a>
-  <a href="https://dix.lat/login"><img src="https://img.shields.io/badge/API_Key-dix.lat-7c5cff?style=for-the-badge" alt="API Key"></a>
-  <a href="https://github.com/eliac-d/Katsuki-bot"><img src="https://img.shields.io/badge/Repositorio-181717?style=for-the-badge&logo=github&logoColor=white" alt="Repo"></a>
-</p>
+<br/>
 
-<p>
-  <img src="https://img.shields.io/badge/Node.js-22%2B-339933?flat-square&logo=nodedotjs&logoColor=white">
-  <img src="https://img.shields.io/badge/Android-Termux-3DDC84?flat-square&logo=android&logoColor=white">
-  <img src="https://img.shields.io/badge/PM2-24%2F7-2B037A?flat-square&logo=pm2&logoColor=white">
-  <img src="https://img.shields.io/badge/Powered_by-Dix-7c5cff?flat-square">
-</p>
+<a href="https://github.com/eliac-d/dix-bot/stargazers"><img src="https://img.shields.io/github/stars/eliac-d/dix-bot?style=for-the-badge&logo=github&logoColor=white&color=7c5cff&labelColor=15151c" alt="Stars"></a>
+<a href="https://github.com/eliac-d/dix-bot/network/members"><img src="https://img.shields.io/github/forks/eliac-d/dix-bot?style=for-the-badge&logo=git&logoColor=white&color=7c5cff&labelColor=15151c" alt="Forks"></a>
+<a href="https://dix.lat/login"><img src="https://img.shields.io/badge/API_Key-dix.lat-7c5cff?style=for-the-badge&labelColor=15151c" alt="API Key"></a>
+<a href="https://github.com/eliac-d/dix-bot"><img src="https://img.shields.io/badge/Repositorio-dix--bot-181717?style=for-the-badge&logo=github&logoColor=white" alt="Repositorio"></a>
+
+<img src="https://img.shields.io/badge/Node.js-22%2B-339933?style=flat-square&logo=nodedotjs&logoColor=white" alt="Node.js 22+">
+<img src="https://img.shields.io/badge/Android-Termux-3DDC84?style=flat-square&logo=android&logoColor=white" alt="Android Termux">
+<img src="https://img.shields.io/badge/PM2-24%2F7-2B037A?style=flat-square&logo=pm2&logoColor=white" alt="PM2">
+<img src="https://img.shields.io/badge/Docker-listo-2496ED?style=flat-square&logo=docker&logoColor=white" alt="Docker">
+<img src="https://img.shields.io/badge/Powered_by-Dix-7c5cff?style=flat-square" alt="Powered by Dix">
+
+<br/>
+<br/>
+
+[Requisitos](#requisitos) · [Instalación](#instalación-en-android) · [24/7](#mantener-activo-247) · [Comandos](#comandos) · [Problemas](#solución-de-problemas) · [Otros entornos](#otros-entornos)
 
 </div>
+
+<br/>
 
 > [!TIP]
 > **¿Solo quieres instalarlo en tu celular?** Sigue los pasos **1 → 2 → 3 → 4** y listo. Todo lo demás está plegado para que lo abras solo si lo necesitas.
 
----
+<br/>
 
-## Antes de empezar
+## De cero a online
 
-Necesitas tres cosas:
+```mermaid
+flowchart LR
+    A[Instalar Termux] --> B[Preparar entorno]
+    B --> C[Clonar e instalar]
+    C --> D[Pegar API Key]
+    D --> E[Vincular WhatsApp]
+    E --> F((ONLINE))
+```
+
+<br/>
+
+## Compatibilidad
+
+| Entorno | Soporte | Recomendado para |
+|:--|:--:|:--|
+| Android · Termux | ✅ | Empezar rápido con tu propio celular |
+| Linux · Debian, Ubuntu, Arch, Alpine | ✅ | Servidores y equipos dedicados |
+| VPS o máquina virtual | ✅ | Operación continua con systemd o PM2 |
+| Docker o Podman | ✅ | Despliegues aislados y reproducibles |
+| macOS | ✅ | Desarrollo y pruebas |
+| Windows · WSL2 | ✅ | Desarrollo y pruebas |
+
+<br/>
+
+## Requisitos
 
 | # | Requisito | Cómo obtenerlo |
 |:--:|:--|:--|
@@ -41,9 +76,11 @@ Necesitas tres cosas:
 | 2 | **API Key gratuita** | [dix.lat/login](https://dix.lat/login) |
 | 3 | **Número de WhatsApp** | Distinto al tuyo personal |
 
----
+<br/>
 
-## 1 · Instalar Termux
+## Instalación en Android
+
+### 1 · Instalar Termux
 
 <details open>
 <summary><b>Mostrar pasos</b></summary>
@@ -62,9 +99,7 @@ Instálalo y abre **Termux**.
 
 </details>
 
----
-
-## 2 · Preparar Termux
+### 2 · Preparar Termux
 
 <details open>
 <summary><b>Mostrar comandos</b></summary>
@@ -96,9 +131,7 @@ Debe mostrar `v22` o superior.
 
 </details>
 
----
-
-## 3 · Instalar y arrancar el bot
+### 3 · Instalar y arrancar el bot
 
 <details open>
 <summary><b>Mostrar comando</b></summary>
@@ -108,23 +141,21 @@ Debe mostrar `v22` o superior.
 Pega este comando completo. Descarga, instala y arranca el bot automáticamente:
 
 ```bash
-git clone https://github.com/eliac-d/Katsuki-bot.git && cd Katsuki-bot && npm install && npm start
+git clone https://github.com/eliac-d/dix-bot.git && cd dix-bot && npm install && npm start
 ```
 
 Espera unos minutos. Cuando termine, verás el mensaje de bienvenida del bot.
 
 </details>
 
----
-
-## 4 · Primera configuración
+### 4 · Primera configuración
 
 <details open>
 <summary><b>API Key y vinculación de WhatsApp</b></summary>
 
 <br/>
 
-### 4.1 · API Key
+#### 4.1 · API Key
 
 1. Entra a [dix.lat/login](https://dix.lat/login) desde el navegador.
 2. Crea tu cuenta o inicia sesión.
@@ -133,7 +164,7 @@ Espera unos minutos. Cuando termine, verás el mensaje de bienvenida del bot.
 
 El bot la guarda. No la vuelve a pedir.
 
-### 4.2 · Vincular WhatsApp
+#### 4.2 · Vincular WhatsApp
 
 Escribe el número del bot con código de país, sin `+` ni espacios.
 
@@ -141,7 +172,7 @@ Escribe el número del bot con código de país, sin `+` ni espacios.
 
 Aparecerá un **código de 8 dígitos**. En tu WhatsApp:
 
-```
+```text
 Ajustes → Dispositivos vinculados → Vincular un dispositivo
 → Vincular con número de teléfono
 ```
@@ -153,9 +184,9 @@ Escribe el código. Cuando Termux muestre `ONLINE`, el bot ya funciona.
 
 </details>
 
----
+<br/>
 
-## 5 · Mantenerlo encendido 24/7
+## Mantener activo 24/7
 
 <details>
 <summary><b>Evitar que Android apague el bot</b></summary>
@@ -168,7 +199,7 @@ Instala y arranca PM2:
 
 ```bash
 npm install -g pm2
-pm2 start npm --name katsuki -- start
+pm2 start npm --name kiriti -- start
 pm2 save
 ```
 
@@ -192,31 +223,31 @@ Instala [Termux:Boot](https://f-droid.org/packages/com.termux.boot/), ábrelo **
 
 ```bash
 mkdir -p ~/.termux/boot
-cat > ~/.termux/boot/katsuki.sh << 'EOF'
+cat > ~/.termux/boot/kiriti.sh << 'EOF'
 #!/data/data/com.termux/files/usr/bin/sh
 termux-wake-lock
 pm2 resurrect
 EOF
-chmod +x ~/.termux/boot/katsuki.sh
+chmod +x ~/.termux/boot/kiriti.sh
 ```
 
 </details>
 
----
+<br/>
 
-## Comandos del día a día
+## Comandos
 
 | Acción | Comando |
 |:--|:--|
 | Ver si está encendido | `pm2 status` |
-| Ver qué está pasando | `pm2 logs katsuki` |
-| Reiniciar el bot | `pm2 restart katsuki` |
-| Apagar el bot | `pm2 stop katsuki` |
-| Actualizar el bot | `cd Katsuki-bot && git pull && npm install && pm2 restart katsuki` |
+| Ver qué está pasando | `pm2 logs kiriti` |
+| Reiniciar el bot | `pm2 restart kiriti` |
+| Apagar el bot | `pm2 stop kiriti` |
+| Actualizar el bot | `cd dix-bot && git pull && npm install && pm2 restart kiriti` |
 
----
+<br/>
 
-## Problemas comunes
+## Solución de problemas
 
 <details>
 <summary><b>Error al instalar con <code>npm install</code></b></summary>
@@ -258,7 +289,7 @@ Cópiala completa desde [dix.lat/login](https://dix.lat/login). Debe verse así:
 <br/>
 
 ```bash
-pm2 stop katsuki
+pm2 stop kiriti
 rm sessions/apikey.json
 npm start
 ```
@@ -266,7 +297,7 @@ npm start
 Al terminar, detén con <kbd>Ctrl</kbd> + <kbd>C</kbd> y vuelve a iniciar:
 
 ```bash
-pm2 start katsuki
+pm2 start kiriti
 ```
 
 </details>
@@ -277,7 +308,7 @@ pm2 start katsuki
 <br/>
 
 ```bash
-pm2 stop katsuki
+pm2 stop kiriti
 rm -rf sessions/main
 npm start
 ```
@@ -299,9 +330,9 @@ Y que Termux tenga la batería en **Sin restricciones**.
 
 </details>
 
----
+<br/>
 
-## Otros entornos de instalación
+## Otros entornos
 
 <details>
 <summary><b>Linux · Debian, Ubuntu, Arch, Alpine</b></summary>
@@ -329,10 +360,10 @@ sudo pacman -S git nodejs npm
 sudo apk add git nodejs npm
 ```
 
-Después, instalar el bot igual que en el paso 3:
+Después, instala el bot igual que en el paso 3:
 
 ```bash
-git clone https://github.com/eliac-d/Katsuki-bot.git && cd Katsuki-bot && npm install && npm start
+git clone https://github.com/eliac-d/dix-bot.git && cd dix-bot && npm install && npm start
 ```
 
 </details>
@@ -366,7 +397,7 @@ En PowerShell con permisos de administrador:
 wsl --install -d Ubuntu
 ```
 
-Dentro de Ubuntu, sigue los pasos de **Linux · Debian / Ubuntu**.
+Dentro de Ubuntu, sigue los pasos de **Linux · Debian, Ubuntu, Arch, Alpine**.
 
 </details>
 
@@ -375,14 +406,19 @@ Dentro de Ubuntu, sigue los pasos de **Linux · Debian / Ubuntu**.
 
 <br/>
 
+Crea el contenedor:
+
 ```bash
-docker run -it --name katsuki \
+docker run -it --name kiriti \
   -v "$PWD/sessions:/app/sessions" \
   -w /app \
   node:22 bash
+```
 
-# Dentro del contenedor
-git clone https://github.com/eliac-d/Katsuki-bot.git .
+Dentro del contenedor:
+
+```bash
+git clone https://github.com/eliac-d/dix-bot.git .
 npm install
 npm start
 ```
@@ -398,18 +434,18 @@ El volumen `sessions/` guarda la API Key y la sesión de WhatsApp entre reinicio
 
 Recomendado si quieres que el bot arranque automáticamente con el sistema operativo.
 
-Crea el archivo `/etc/systemd/system/katsuki.service`:
+Crea el archivo `/etc/systemd/system/kiriti.service`:
 
 ```ini
 [Unit]
-Description=Katsuki MD - WhatsApp Bot
+Description=Kiriti-Bot-MD - WhatsApp Bot
 After=network-online.target
 Wants=network-online.target
 
 [Service]
 Type=simple
 User=TU_USUARIO
-WorkingDirectory=/ruta/a/Katsuki-bot
+WorkingDirectory=/ruta/a/dix-bot
 ExecStart=/usr/bin/npm start
 Restart=always
 RestartSec=10
@@ -422,14 +458,14 @@ Actívalo:
 
 ```bash
 sudo systemctl daemon-reload
-sudo systemctl enable --now katsuki
-sudo systemctl status katsuki
+sudo systemctl enable --now kiriti
+sudo systemctl status kiriti
 ```
 
 Ver logs en tiempo real:
 
 ```bash
-journalctl -u katsuki -f
+journalctl -u kiriti -f
 ```
 
 </details>
@@ -441,18 +477,24 @@ journalctl -u katsuki -f
 
 ```bash
 npm install -g pm2
-pm2 start npm --name katsuki -- start
-pm2 startup        # ejecuta el comando que PM2 imprima
+pm2 start npm --name kiriti -- start
+pm2 startup
 pm2 save
 ```
 
+Ejecuta el comando que `pm2 startup` imprima en pantalla antes de `pm2 save`.
+
 </details>
+
+<br/>
 
 ---
 
 <div align="center">
 
 <sub>Desarrollado y mantenido por <strong>Dix System</strong></sub>
+
+<br/>
 
 <a href="https://dix.lat">
   <picture>
@@ -462,6 +504,8 @@ pm2 save
   </picture>
 </a>
 
-[dix.lat](https://dix.lat)
+<br/>
+
+[dix.lat](https://dix.lat) · [Repositorio](https://github.com/eliac-d/dix-bot) · [API Key](https://dix.lat/login)
 
 </div>

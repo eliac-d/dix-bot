@@ -82,7 +82,7 @@ export const toimgCommand = {
     commands: {
         toimg: {
             name: 'toimg',
-            alias: ['img', 'stickerimg', 'tovideo', 'tomp4', 'mp4', 'togif', 'gif'],
+            alias: ['img', 'stickerimg', 'tovideo', 'tomp4', 'togif', 'gif'],
             run: async (m, { conn, command }) => {
                 const q = m.quoted ? m.quoted : m;
                 
@@ -98,7 +98,7 @@ export const toimgCommand = {
 
                 const cmd = command.toLowerCase();
                 const targetGif = cmd === 'togif' || cmd === 'gif';
-                const targetVideo = cmd === 'tovideo' || cmd === 'tomp4' || cmd === 'mp4';
+                const targetVideo = cmd === 'tovideo' || cmd === 'tomp4';
                 const targetImg = cmd === 'toimg' || cmd === 'img' || cmd === 'stickerimg';
 
                 try {

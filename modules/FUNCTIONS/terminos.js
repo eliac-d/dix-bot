@@ -1,18 +1,15 @@
-
-
 export const terminos = {
-    category: 'search',
+    category: 'main',
     commands: {
         ter: {
             name: 'terminos',
             alias: ['condiciones'],
-            run: async (m, { conn, text, command }) => {
-               
+            run: async (m, { conn }) => {
                 try {
-                    
-
                     let mensaje = `📋 *TÉRMINOS, CONDICIONES Y POLÍTICA DE PRIVACIDAD*
 *Sistema de Automatización: ᯓᴋᴀᴛsᴜᴋɪ ᴍᴅ ➫*
+
+» *Resumen rápido:* No leemos tus chats privados, tus datos están seguros, no vendemos tu información y el 100% de nuestra infraestructura es propia. Al usar el bot o un Subbot, aceptas los riesgos de usar automatización en WhatsApp.
 
 Al hacer uso de este bot, sus funciones, comandos o al vincular una sesión de Subbot, aceptas de manera explícita y sin excepciones los siguientes términos y condiciones de servicio:
 
@@ -23,10 +20,10 @@ Al hacer uso de este bot, sus funciones, comandos o al vincular una sesión de S
 • El personaje, nombre o elementos visuales utilizados son propiedad exclusiva de sus respectivos creadores. Se emplean únicamente bajo el concepto de apreciación estética y caracterización, sin pretender atribuirse derechos de propiedad intelectual sobre los mismos.
 
 ───────────────
-2. *INFRAESTRUCTURA Y SERVICIOS DE TERCEROS (APIs)*
-• Para garantizar la estabilidad del sistema, el 78% de los servicios de procesamiento y APIs son propios.
-• El 22% restante depende de integraciones, APIs y servidores externos de terceros.
-• No nos hacemos responsables por fallas, interrupciones, retrasos o indisponibilidad del servicio causados por caídas en proveedores externos o mantenimientos en la infraestructura.
+2. *INFRAESTRUCTURA Y SERVICIOS (APIs)*
+• El 100% de los servicios de procesamiento, APIs y herramientas internas son de desarrollo propio, garantizando la máxima estabilidad, velocidad y seguridad.
+• El sistema no depende de infraestructuras inestables de terceros para su funcionamiento principal.
+• No nos hacemos responsables por fallas, interrupciones o retrasos causados por caídas en plataformas externas de las cuales se extraiga contenido (ej. TikTok, Instagram, Spotify, etc.).
 
 ───────────────
 3. *USO DE SUBBOTS Y RIESGO DE CUENTA*
@@ -64,15 +61,12 @@ Nos reservamos el derecho de suspender, revocar o banear el acceso a cualquier u
 📌 *Nota:* Si no estás de acuerdo con alguna de las cláusulas aquí descritas, debes abstenerte de interactuar con el bot y desconectar cualquier sesión de Subbot activa.
 `;
 
-                   
-
                     await conn.sendMessage(m.chat, {
                         product: {
                             productImage: {
-                                url: img(conn)
+                                url: typeof global.img === 'function' ? global.img(conn) : ''
                             },
                             title: "TÉRMINOS Y CONDICIONES",
-                            
                             retailerId: "1466",
                             productId: "37199733896340479",
                             productImageCount: 1,
@@ -86,7 +80,6 @@ Nos reservamos el derecho de suspender, revocar o banear el acceso a cualquier u
                 } catch (e) {
                     console.error(e);
                     m.react('❌');
-                    
                 }
             }
         }

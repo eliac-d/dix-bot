@@ -3,7 +3,7 @@ export const pfpCommand = {
     commands: {
         pfp: {
             name: 'pfp',
-            alias: ['pfp', 'perfil'],
+            alias: ['pp'],
             run: async (m, { conn, text }) => {
                 const who = m.mentionedJid?.[0] || m.quoted?.sender || (text ? text.replace(/[^0-9]/g, '') + '@s.whatsapp.net' : m.sender);
 

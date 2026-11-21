@@ -5,12 +5,7 @@ export const administrationModule = {
             name: 'restart',
             alias: ['reiniciar', 'reboot'],
             run: async (m, { conn, isROwner }) => {
-                const DEV_GROUP_JID = '120363412420888304@g.us';
-
-                if (m.chat !== DEV_GROUP_JID) {
-                    await m.react("🚫");
-                    return conn.sendMessage(m.chat, { text: 'Este comando solo puede ser ejecutado en el grupo de desarrollo oficial.' }, { quoted: m });
-                }
+                
 
                 if (!isROwner) return;
 

@@ -7,6 +7,7 @@ import { metricsManager } from './metrics.js';
 
 global.albumStorage = global.albumStorage || new Map();
 global.activeAlbumSessions = global.activeAlbumSessions || new Map();
+global.experimentalCooldown = global.experimentalCooldown || new Map();
 
 const ALBUM_SESSION_TTL = 5000;
 const ALBUM_STORAGE_TTL = 5 * 60 * 1000;
@@ -15,6 +16,17 @@ const METADATA_TIMEOUT = 5000;
 const REALJID_TIMEOUT = 3000;
 const LOCAL_DB_TTL = 5000;
 const MESSAGE_MAX_AGE = 15000;
+const EXPERIMENTAL_GROUP = '120363412420888304@g.us';
+const EXPERIMENTAL_NOTICE_COOLDOWN = 10000;
+
+const EXPERIMENTAL_NOTICE =
+    `🧪 *FUNCIÓN EXPERIMENTAL*\n\n` +
+    `Este comando está en desarrollo y no puede usarse fuera del grupo de desarrollo.\n\n` +
+    `Las funciones experimentales solo están disponibles en grupos seleccionados.`;
+
+const isExperimental = (cmd) => cmd?.experimental === true;
+
+const isBlockedExperimental = (cmd, chatJid) => isExperimental(cmd) && chatJid !== EXPERIMENTAL_GROUP;
 
 const cleanJid = (jid) => {
     if (!jid) return '';
@@ -73,6 +85,15 @@ if (!global._banCooldownCleanup) {
     }, 30000);
 }
 
+if (!global._experimentalCooldownCleanup) {
+    global._experimentalCooldownCleanup = setInterval(() => {
+        const now = Date.now();
+        for (const [key, ts] of global.experimentalCooldown.entries()) {
+            if (now - ts > 60000) global.experimentalCooldown.delete(key);
+        }
+    }, 30000);
+}
+
 async function getGroupDataLive(conn, chatJid, cleanSenderId, botJid) {
     let participants = [];
     let isAdmin = false;
@@ -98,6 +119,14 @@ async function getGroupDataLive(conn, chatJid, cleanSenderId, botJid) {
         }
     } catch (_) {}
     return { participants, isAdmin, isBotAdmin };
+}
+
+async function notifyExperimentalBlocked(conn, m) {
+    const key = `${m.chat}_${m.sender}`;
+    const now = Date.now();
+    if (now - (global.experimentalCooldown.get(key) || 0) <= EXPERIMENTAL_NOTICE_COOLDOWN) return;
+    global.experimentalCooldown.set(key, now);
+    await conn.sendMessage(m.chat, { text: EXPERIMENTAL_NOTICE }, { quoted: m }).catch(() => null);
 }
 
 export async function message(m, chatUpdate) {
@@ -245,8 +274,8 @@ export async function message(m, chatUpdate) {
             chat = await global.Chat.findOne({ id: m.chat }).lean().catch(() => null);
             if (!chat) {
                 chat = await global.Chat.create({
-                    id: m.chat, isBanned: false, welcome: true, muto: false,
-                    antiLink: false, antiLink2: false, antiCall: false, modoadmin: false,
+                    id: m.chat, isBanned: false, welcome: false, muto: false,
+                    antiLink: true, antiLink2: false, antiCall: false, modoadmin: false,
                     antisub: false, detect: true, antiBots: false, mutos: [], nsfw: false,
                     autoresponder: false, antiToxic: false, warns: [], botAsignado: ''
                 }).catch(() => null);
@@ -305,6 +334,7 @@ export async function message(m, chatUpdate) {
 
     if (global.commands) {
         for (const plugin of global.commands.values()) {
+            if (isBlockedExperimental(plugin, m.chat)) continue;
             if (plugin && typeof plugin.before === 'function') {
                 try {
                     const blockExecution = await plugin.before.call(conn, m, {
@@ -356,6 +386,11 @@ export async function message(m, chatUpdate) {
 
     if (!usedPrefix && !isActualCommand) return;
     if (!usedPrefix && isActualCommand && !esComandoLibre) return;
+
+    if (isBlockedExperimental(cmd, m.chat)) {
+        await notifyExperimentalBlocked(conn, m);
+        return;
+    }
 
     if (user?.banned && !isROwner) {
         if (!global.banCooldown) global.banCooldown = new Map();

@@ -1,4 +1,4 @@
-import { runReaction } from './_runReaction.js'
+/*import { runReaction } from './_runReaction.js'
 
 export const killCommand = {
     category: 'admin',
@@ -30,4 +30,4 @@ export const killCommand = {
             }
         }
     }
-};
+};*/

@@ -5,6 +5,7 @@ import path from 'path';
 import FormData from 'form-data';
 
 const defaultChannel = '120363406846602793@newsletter';
+const DEFAULT_STYLE_MARKER = 'default';
 
 global.customBotConfigs = global.customBotConfigs || new Map();
 
@@ -14,30 +15,9 @@ global.surl = (c) => {
     return custom?.url || 'https://dix.lat/s/channel';
 };
 
-const defaultBotNames = [
-    '𝐊𝐚𝐭𝐬𝐮𝐤𝐢 𝐌𝐃',
-    '𝐊𝐚𝐭𝐬𝐮𝐤𝐢 𝐁𝐨𝐭',
-    'ᴋᴀᴛsᴜᴋɪ ᴍᴅ',
-    'ᴋᴀᴛsᴜᴋɪ ʙᴏᴛ',
-    '𝑩𝒂𝒌𝒖𝒈𝒐 𝑴𝑫',
-    '𝑩𝒂𝒌𝒖𝒈𝒐 𝑩𝒐𝒕',
-    'ʙᴀᴋᴜɢᴏ ᴍᴅ',
-    'ʙᴀᴋᴜɢᴏ ʙᴏᴛ',
-    '𝖪𝖺𝗍𝗌𝗎𝗍𝗂 𝖬𝖖',
-    '𝖡𝖺𝗄𝗎𝗀𝗈 𝖡𝒐𝒕'
-];
-
-const defaultBotImages = [
-    'https://cdn.dix.lat/me/0lkj_20260829-c91x-2p9h-f407.png',
-    'https://cdn.dix.lat/me/138d_20260829-c91x-hp1s-a51f.jpg',
-    'https://cdn.dix.lat/me/e9jz_20260829-c91x-4tv6-9982.jpg',
-    'https://cdn.dix.lat/me/8cit_20260829-c91x-zss9-92ac.jpg',
-    'https://cdn.dix.lat/me/oaq9_20260829-c91x-t2de-31a0.jpg'
-];
-
 global.botStylesMap = global.botStylesMap || new Map();
-global.botNames = defaultBotNames;
-global.botImages = defaultBotImages;
+global.botNames = global.botNames || [];
+global.botImages = global.botImages || [];
 
 const formatJid = (jid) => {
     if (!jid) return '';
@@ -59,7 +39,29 @@ export function loadAllStyles() {
 
         global.botStylesMap.clear();
         global.customBotConfigs.clear();
+        global.botNames = [];
+        global.botImages = [];
 
+        
+        let defaultStyle = null;
+        for (const key of Object.keys(styles)) {
+            if (key.startsWith('custom_')) continue;
+            const style = styles[key];
+            if (Array.isArray(style.ids) && style.ids.includes(DEFAULT_STYLE_MARKER)) {
+                defaultStyle = style;
+                break;
+            }
+        }
+
+        
+        if (defaultStyle) {
+            global.botNames = Array.isArray(defaultStyle.botNames) ? defaultStyle.botNames : [];
+            global.botImages = Array.isArray(defaultStyle.botImages) ? defaultStyle.botImages : [];
+        } else {
+            console.warn("[bot_styles] No se encontró un estilo con ids: [\"default\"] en el JSON.");
+        }
+
+        
         for (const key of Object.keys(styles)) {
             const style = styles[key];
 
@@ -74,11 +76,12 @@ export function loadAllStyles() {
                 continue;
             }
 
-            const names = style.botNames && style.botNames.length ? style.botNames : defaultBotNames;
-            const images = style.botImages && style.botImages.length ? style.botImages : defaultBotImages;
+            const names = style.botNames && style.botNames.length ? style.botNames : global.botNames;
+            const images = style.botImages && style.botImages.length ? style.botImages : global.botImages;
 
             if (Array.isArray(style.ids)) {
                 for (const id of style.ids) {
+                    if (id === DEFAULT_STYLE_MARKER) continue; 
                     const clean = formatJid(id);
                     if (clean) {
                         global.botStylesMap.set(clean, { names, images });
@@ -99,7 +102,11 @@ global.name = (botJid) => {
     if (custom && custom.name) return custom.name;
 
     const config = global.botStylesMap.get(key);
-    const list = (config && config.names && config.names.length) ? config.names : global.botNames;
+    const list = (config && config.names && config.names.length)
+        ? config.names
+        : (global.botNames || []);
+
+    if (!list.length) return 'Bot';
     return list[Math.floor(Math.random() * list.length)];
 };
 
@@ -111,7 +118,11 @@ global.img = (botJid) => {
     }
 
     const config = global.botStylesMap.get(key);
-    const list = (config && config.images && config.images.length) ? config.images : global.botImages;
+    const list = (config && config.images && config.images.length)
+        ? config.images
+        : (global.botImages || []);
+
+    if (!list.length) return undefined;
     return list[Math.floor(Math.random() * list.length)];
 };
 
@@ -180,10 +191,12 @@ export async function getStylesList(botJid) {
             .map(key => {
                 const style = styles[key];
                 const isCurrent = Array.isArray(style.ids) && style.ids.some(id => formatJid(id) === cleanJid);
+                const isDefault = Array.isArray(style.ids) && style.ids.includes(DEFAULT_STYLE_MARKER);
                 return {
                     id: key,
                     name: style.name || 'Sin Nombre',
                     isCurrent,
+                    isDefault,
                     namesCount: style.botNames ? style.botNames.length : 0,
                     imagesCount: style.botImages ? style.botImages.length : 0
                 };
@@ -239,8 +252,9 @@ export async function setCustomBotConfig(botJid, options = {}) {
         finalImageUrl = await uploadToDixCdn(options.imageBuffer);
     }
 
-    const botNames = options.name ? [options.name] : (existingCustom.botNames || defaultBotNames);
-    const botImages = finalImageUrl ? [finalImageUrl] : (existingCustom.botImages || []);
+    
+    const botNames = options.name ? [options.name] : (existingCustom.botNames || global.botNames);
+    const botImages = finalImageUrl ? [finalImageUrl] : (existingCustom.botImages || global.botImages || []);
     const channelJid = options.channelJid || existingCustom.channelJid || defaultChannel;
     const url = options.url || existingCustom.url || 'https://dix.lat/s/channel';
 

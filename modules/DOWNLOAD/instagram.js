@@ -1,4 +1,5 @@
 import fetch from 'node-fetch'
+import { DAILY_LIMIT_MESSAGE, assertNoLimit, isLimitError } from '../../src/utils/dixLimit.js';
 
 export const instagramDownloadModule = {
     category: 'descargas',
@@ -21,7 +22,7 @@ export const instagramDownloadModule = {
                             'Accept': 'application/json'
                         }
                     })
-                    const json = await res.json()
+                    const json = assertNoLimit(await res.json())
 
                     if (!json.success || !json.data || !json.data.data || !json.data.data[0]?.url) {
                         throw new Error("No video found")
@@ -38,9 +39,10 @@ export const instagramDownloadModule = {
 
                     if (m.react) await m.react("✅")
                 } catch (e) {
-                    console.error(e)
                     if (m.react) await m.react("❌")
-                    m.reply(`⍰ Error al procesar Instagram.\n\nUsa el comando *#report* para reportar este error.`)
+                    if (isLimitError(e)) return m.reply(DAILY_LIMIT_MESSAGE)
+                    console.error(e)
+                    m.reply(`⍰ No se pudo descargar el contenido.\n\n> Posiblemente es privado o la URL no sea de un video de Instagram.\n> Por favor intenta de nuevo o intenta con otro link.`)
                 }
             }
         }

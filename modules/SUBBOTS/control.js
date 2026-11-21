@@ -49,7 +49,7 @@ export const botControl = {
     commands: {
         bot: {
             name: 'bot',
-            alias: ['enable', 'onchat'],
+            alias: ['onchat'],
             admin: false,
             rowner: false,
             isPrem: true,
@@ -70,7 +70,7 @@ export const botControl = {
                         await global.Chat.updateOne({ id: m.chat }, { $set: { isBanned: true } });
                         await m.react("✖️");
                         return conn.sendMessage(m.chat, { 
-                            text: `◆ Estado: desactivado.\n◆  Desactivado por: @${m.sender.split('@')[0]}\n\n⌬ Reactivación: ${usedPrefix + command} on`,
+                            text: `◆ Estado: desactivado.\n◆ Desactivado por: @${m.sender.split('@')[0]}\n\n⌬ Reactivación: ${usedPrefix + command} on`,
                             mentions: [m.sender],
                             contextInfo: { ...global.channelInfo }
                         }, { quoted: m });
@@ -200,9 +200,53 @@ export const botControl = {
                 }
             }
         },
-        setcustom: {
-            name: 'setcustom',
-            alias: ['custom', 'personalizar'],
+        setbanner: {
+            name: 'setbanner',
+            alias: ['banner', 'setavatar'],
+            admin: false,
+            rowner: false,
+            isPrem: false,
+            self: true,
+            run: async (m, { conn, usedPrefix }) => {
+                try {
+                    const botJid = cleanJid(conn.user.id);
+                    const q = m.quoted ? m.quoted : m;
+                    const mime = (q.msg || q).mimetype || '';
+
+                    if (!mime.includes('image')) {
+                        return conn.sendMessage(m.chat, {
+                            text: `『 🖼️ CONFIGURACIÓN DE BANNER 』\n\n◆ Bot ID: @${botJid.split('@')[0]}\n\n📌 *Uso:* Responde a una imagen con *${usedPrefix}setbanner* para establecerla como banner del bot.`,
+                            mentions: [botJid],
+                            contextInfo: { ...global.channelInfo }
+                        }, { quoted: m });
+                    }
+
+                    const imageBuffer = await q.download();
+
+                    const result = await setCustomBotConfig(botJid, {
+                        imageBuffer: imageBuffer
+                    });
+
+                    if (!result.success) {
+                        return m.reply("『 ❌ 』 Ocurrió un error al guardar el banner.");
+                    }
+
+                    await m.react("🖼️");
+                    return conn.sendMessage(m.chat, {
+                        text: `『 ✅ BANNER ACTUALIZADO 』\n\n◆ Bot ID: @${botJid.split('@')[0]}\n◆ Foto Actualizada: *${result.data?.hasCustomImage ? 'Sí' : 'No'}*`,
+                        mentions: [botJid],
+                        contextInfo: { ...global.channelInfo }
+                    }, { quoted: m });
+
+                } catch (e) {
+                    console.error(e);
+                    return m.reply("『 ❌ 』 Error al procesar la configuración del banner.");
+                }
+            }
+        },
+        setbotname: {
+            name: 'setbotname',
+            alias: ['botname', 'nombredelbot'],
             admin: false,
             rowner: false,
             isPrem: false,
@@ -210,47 +254,35 @@ export const botControl = {
             run: async (m, { conn, text, usedPrefix }) => {
                 try {
                     const botJid = cleanJid(conn.user.id);
-                    const q = m.quoted ? m.quoted : m;
-                    const mime = (q.msg || q).mimetype || '';
 
-                    if (!text && !mime.includes('image')) {
+                    if (!text) {
                         return conn.sendMessage(m.chat, {
-                            text: `『 🛠️ PERSONALIZACIÓN COMPLETA 』\n\n◆ Configura tu Bot de forma personalizada mandando los parámetros separados por "|":\n\n📌 *Formato:* ${usedPrefix}setcustom Nombre | CanalJid | URL\n\n🖼️ *Imagen:* Responde a una imagen con el comando para establecer la foto de perfil personalizada.\n\nEjemplo: ${usedPrefix}setcustom Mi Bot Pro | 120363406846602793@newsletter | https://dix.lat/mi-canal`,
+                            text: `『 🏷️ CONFIGURACIÓN DE NOMBRE 』\n\n◆ Bot ID: @${botJid.split('@')[0]}\n\n📌 *Uso:* ${usedPrefix}setbotname [nombre]\nEjemplo: ${usedPrefix}setbotname Mi Bot Pro`,
+                            mentions: [botJid],
                             contextInfo: { ...global.channelInfo }
                         }, { quoted: m });
                     }
 
-                    const parts = text ? text.split('|').map(v => v.trim()) : [];
-                    const customName = parts[0] || null;
-                    const channelJid = parts[1] || null;
-                    const customUrl = parts[2] || null;
-
-                    let imageBuffer = null;
-                    if (mime.includes('image')) {
-                        imageBuffer = await q.download();
-                    }
+                    const customName = text.trim();
 
                     const result = await setCustomBotConfig(botJid, {
-                        name: customName,
-                        channelJid: channelJid,
-                        url: customUrl,
-                        imageBuffer: imageBuffer
+                        name: customName
                     });
 
                     if (!result.success) {
-                        return m.reply("『 ❌ 』 Ocurrió un error al guardar la personalización.");
+                        return m.reply("『 ❌ 』 Ocurrió un error al guardar el nombre.");
                     }
 
-                    await m.react("✨");
+                    await m.react("🏷️");
                     return conn.sendMessage(m.chat, {
-                        image: { url: global.img(conn) },
-                        caption: `『 ✨ PERSONALIZACIÓN GUARDADA 』\n\n◆ Nombre: *${result.data.name}*\n◆ Canal JID: *${result.data.channelJid}*\n◆ URL: *${result.data.url}*\n◆ Foto Actualizada: *${result.data.hasCustomImage ? 'Sí' : 'No'}*`,
+                        text: `『 ✅ NOMBRE ACTUALIZADO 』\n\n◆ Bot ID: @${botJid.split('@')[0]}\n◆ Nuevo Nombre: *${result.data?.name || customName}*`,
+                        mentions: [botJid],
                         contextInfo: { ...global.channelInfo }
                     }, { quoted: m });
 
                 } catch (e) {
                     console.error(e);
-                    return m.reply("『 ❌ 』 Error al procesar la configuración personalizada.");
+                    return m.reply("『 ❌ 』 Error al procesar la configuración del nombre.");
                 }
             }
         }

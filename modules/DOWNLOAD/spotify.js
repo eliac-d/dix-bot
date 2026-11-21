@@ -1,4 +1,5 @@
 import fetch from 'node-fetch';
+import { DAILY_LIMIT_MESSAGE, assertNoLimit, isLimitError } from '../../src/utils/dixLimit.js';
 
 export const spotifyDownloadModule = {
     category: 'descargas',
@@ -25,7 +26,7 @@ export const spotifyDownloadModule = {
                         trackInfo = { title: 'Spotify Track', artist: 'Desconocido', album: '-', duration: '-', year: '-' };
                     } else {
                         const searchRes = await fetch(`${SEARCH_URL}?q=${encodeURIComponent(text)}&limit=1`);
-                        const searchData = await searchRes.json();
+                        const searchData = assertNoLimit(await searchRes.json());
 
                         if (!searchData.success || !searchData.data || !searchData.data.results || searchData.data.results.length === 0) {
                             await m.react('✖️');
@@ -62,7 +63,7 @@ export const spotifyDownloadModule = {
                     }
 
                     const downloadRes = await fetch(`${DOWNLOAD_URL}?apikey=${API_KEY}&url=${encodeURIComponent(trackUrl)}`);
-                    const downloadData = await downloadRes.json();
+                    const downloadData = assertNoLimit(await downloadRes.json());
 
                     if (downloadData.success && downloadData.data && downloadData.data.downloadURL) {
                         await conn.sendMessage(m.chat, { 
@@ -78,7 +79,8 @@ export const spotifyDownloadModule = {
 
                 } catch (e) {
                     await m.react('✖️');
-                    m.reply(`> ⚔ ERROR CRÍTICO: ${e.message}`);
+                    if (isLimitError(e)) return m.reply(DAILY_LIMIT_MESSAGE);
+                    m.reply(`> ⚔ Lo siento no se pudo descargar el archivo`);
                 }
             }
         }

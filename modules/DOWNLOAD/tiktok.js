@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { DAILY_LIMIT_MESSAGE, assertNoLimit, isLimitError } from '../../src/utils/dixLimit.js';
 
 export const tiktokDownloadModule = {
     category: 'descargas',
@@ -23,6 +24,8 @@ export const tiktokDownloadModule = {
                             'Accept': 'application/json'
                         }
                     });
+
+                    assertNoLimit(res);
 
                     if (!res || !res.success || !res.data) {
                         await m.react("❌");
@@ -61,8 +64,9 @@ export const tiktokDownloadModule = {
 
                     await m.react("✅");
                 } catch (e) {
-                    console.error(e);
                     await m.react("❌");
+                    if (isLimitError(e)) return m.reply(DAILY_LIMIT_MESSAGE);
+                    console.error(e);
                     m.reply(`> ⚔ ERROR CRÍTICO: ${e.message}`);
                 }
             }

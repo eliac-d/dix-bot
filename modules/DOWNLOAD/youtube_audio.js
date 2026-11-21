@@ -3,6 +3,7 @@ import * as pix from 'pixcore';
 import axios from 'axios';
 import fetch from 'node-fetch';
 import { dispatchMediaTask } from '../../src/workers/workerPool.js';
+import { DAILY_LIMIT_MESSAGE, assertNoLimit, isLimitError } from '../../src/utils/dixLimit.js';
 
 const UA = 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Mobile Safari/537.36';
 const API_KEY = apikey;
@@ -27,6 +28,7 @@ async function axiosWithRetry(url, options = {}, retries = 3, delay = 3000) {
         try {
             return await axios.get(url, options);
         } catch (error) {
+            if (isLimitError(error)) throw new DixLimitError();
             const status = error?.response?.status;
             if ((status === 429 || status === 403 || status >= 500) && i < retries - 1) {
                 await new Promise(resolve => setTimeout(resolve, delay));
@@ -41,7 +43,7 @@ async function axiosWithRetry(url, options = {}, retries = 3, delay = 3000) {
 async function descargarMusicaDix(videoUrl) {
     const apiUrl = `https://dix.lat/v1/ytdl?url=${encodeURIComponent(videoUrl)}&type=mp3&apikey=${API_KEY}`;
     const response = await axiosWithRetry(apiUrl, { headers: { 'User-Agent': UA } });
-    const data = response.data;
+    const data = assertNoLimit(response.data);
 
     if (data && data.success && data.data && data.data.downloadURL) {
         return {
@@ -178,6 +180,9 @@ export const downloadsModule = {
                                 }, { quoted: m });
                             }
                         } catch (parallelError) {
+                            if (isLimitError(parallelError)) {
+                                return conn.reply(m.chat, DAILY_LIMIT_MESSAGE, m);
+                            }
                             const errMsg = parallelError?.response?.data?.message || parallelError?.message || String(parallelError);
                             conn.reply(m.chat, `Error al procesar la descarga de audio: ${errMsg}`, m);
                         }

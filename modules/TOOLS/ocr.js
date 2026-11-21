@@ -11,7 +11,7 @@ export const ocrCommand = {
     commands: {
         ocr: {
             name: 'ocr',
-            alias: ['read', 'extraertexto'],
+            alias: ['extraertexto'],
             run: async (m, { conn }) => {
                 try {
                     const quoted = m.quoted ? m.quoted : m;

@@ -2,9 +2,8 @@ import { jidNormalizedUser } from '@whiskeysockets/baileys';
 
 export const antitoxicModule = {
     commands: {
-        antitoxic: {
-          //  name: 'antitoxic.v.wj.wyi',
-            alias: [],
+        antitox8ic: {
+          
             async before(m, { conn, isOwner, chat }) {
                 if (!m.isGroup || !chat?.antiToxic || isOwner || m.fromMe || m.isBaileys) return false;
 

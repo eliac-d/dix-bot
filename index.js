@@ -21,34 +21,9 @@ import { ensureApiKey } from './src/utils/apikey.js';
 import { initSerbotBridge, updateMainConn, loadSubBots } from './core/s/serbot-bridge.js';
 import { databaseManager } from './database/db_adapter.js';
 
-const FILTERED_LOGS = [
-    'Closing session', 'Removing old closed session',
-    'Closing open session in favor of incoming prekey bundle',
-    'Bad MAC', 'Failed to decrypt message with any known session',
-    'MessageCounterError', 'Decrypted message with closed session',
-    'Session error', 'Connection Closed', 'Connection Failure',
-    'connect ECONNREFUSED', 'socket hang up', 'ECONNRESET'
-];
-
 const startingLocks = new Set();
 
-const maskLogs = (chunk, encoding, callback, originalWrite) => {
-    const msg = chunk?.toString?.() || '';
-    if (FILTERED_LOGS.some(f => msg.includes(f))) {
-        if (typeof encoding === 'function') encoding();
-        else if (typeof callback === 'function') callback();
-        return true;
-    }
-    return originalWrite(chunk, encoding, callback);
-};
-
-const _stdout = process.stdout.write.bind(process.stdout);
-process.stdout.write = (chunk, encoding, callback) => maskLogs(chunk, encoding, callback, _stdout);
-const _stderr = process.stderr.write.bind(process.stderr);
-process.stderr.write = (chunk, encoding, callback) => maskLogs(chunk, encoding, callback, _stderr);
-
 if (!global.__process_events_initialized) {
-    process.removeAllListeners('warning');
     process.setMaxListeners(30);
 
     const flushData = async () => {
@@ -69,14 +44,11 @@ if (!global.__process_events_initialized) {
     process.on('SIGTERM', flushData);
 
     process.on('uncaughtException', (err) => {
-        const msg = err?.message || '';
-        if (FILTERED_LOGS.some(f => msg.includes(f))) return;
         console.error('[uncaughtException]', err?.stack || err);
     });
 
     process.on('unhandledRejection', (reason) => {
         const msg = reason instanceof Error ? reason.message : String(reason);
-        if (FILTERED_LOGS.some(f => msg.includes(f))) return;
         console.error('[unhandledRejection]', reason instanceof Error ? reason.stack : msg);
     });
 
@@ -116,7 +88,7 @@ console.error = (...args) => log.fail(...args);
 
 printBanner();
 await ensureApiKey();
-log.info('Iniciando Katsuki...');
+log.info('Iniciando bot...');
 
 await fsP.mkdir('./database', { recursive: true }).catch(() => {});
 await fsP.mkdir('./tmp', { recursive: true }).catch(() => {});
@@ -338,8 +310,7 @@ global.reload = async function (restatConn) {
                         await messageHandlerMain.call(global.conn, m, chatUpdate);
                     }
                 } catch (e) {
-                    const em = e?.message || '';
-                    if (!FILTERED_LOGS.some(f => em.includes(f))) console.error('[messages.upsert]', em);
+                    console.error('[messages.upsert]', e?.message || '');
                 }
             });
         }
@@ -449,6 +420,7 @@ global.reloadModules = async function (check) {
                         for (const cmdKey in possibleGroup.commands) {
                             const cmd = possibleGroup.commands[cmdKey];
                             cmd.category = possibleGroup.category || 'general';
+if (path.relative(modulesDir, filePath).split(path.sep)[0].toLowerCase() === 'prueba') cmd.experimental = true;
                             global.commands.set(cmd.name, cmd);
                             if (cmd.alias && Array.isArray(cmd.alias)) {
                                 cmd.alias.forEach(a => global.aliases.set(a, cmd.name));

@@ -26,7 +26,7 @@ export const emojiQuizCommand = {
     commands: {
         emojiquiz: {
             name: 'emojiquiz',
-            alias: ['cineemoji', 'adivina'],
+            alias: ['cineemoji'],
             async before(m, { conn }) {
                 global.quizGames = global.quizGames || {};
                 const gameId = `${m.chat}-${m.sender}`;

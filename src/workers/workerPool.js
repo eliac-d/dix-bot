@@ -6,8 +6,9 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const WORKER_PATH = path.join(__dirname, 'workerRouter.js');
 
 const TASK_TIMEOUT = 60000;
-const IDLE_TIMEOUT = 30000; // Se destruye rápido si no hay tareas para liberar recursos
-const SHUTDOWN_GRACE_MS = 2000;
+const IDLE_TIMEOUT = 30000;
+const SHUTDOWN_GRACE_MS = 1500;
+const MAX_QUEUE = 20;
 
 let workerEntry = null;
 const queue = [];
@@ -16,20 +17,21 @@ function createWorker() {
     const entry = {
         worker: new Worker(WORKER_PATH),
         busy: false,
+        dead: false,
         lastUsed: Date.now(),
-        currentResolve: null,
-        currentReject: null,
-        timer: null,
+        resolve: null,
+        reject: null,
+        timer: null
     };
 
     entry.worker.on('message', (msg) => {
+        if (!entry.busy || entry.dead) return;
         if (msg && msg.type === '__shutdown_ack__') return;
-        if (!entry.busy) return;
 
         if (msg && msg.success) {
             let result = msg.result;
             if (result && result.isBuffer && result.data) {
-                result = { ...result, buffer: Buffer.from(result.data) };
+                result = { ...result, buffer: Buffer.from(result.data.buffer, result.data.byteOffset, result.data.byteLength) };
                 delete result.data;
                 delete result.isBuffer;
             }
@@ -39,16 +41,10 @@ function createWorker() {
         }
     });
 
-    entry.worker.on('error', (err) => {
-        finishTask(entry, false, null, err);
-        destroyWorker();
-    });
+    entry.worker.on('error', (err) => retire(entry, err));
 
     entry.worker.on('exit', (code) => {
-        if (entry.busy) {
-            finishTask(entry, false, null, new Error(`El worker finalizó inesperadamente (código ${code})`));
-        }
-        destroyWorker();
+        retire(entry, new Error(`El worker finalizó inesperadamente (código ${code})`));
     });
 
     return entry;
@@ -59,73 +55,66 @@ function finishTask(entry, success, result, error) {
         clearTimeout(entry.timer);
         entry.timer = null;
     }
-    const resolve = entry.currentResolve;
-    const reject = entry.currentReject;
-    entry.currentResolve = null;
-    entry.currentReject = null;
+    const resolve = entry.resolve;
+    const reject = entry.reject;
+    entry.resolve = null;
+    entry.reject = null;
     entry.busy = false;
     entry.lastUsed = Date.now();
 
-    if (success) {
-        resolve?.(result);
-    } else {
-        reject?.(error);
-    }
+    if (success) resolve?.(result);
+    else reject?.(error);
 
     processQueue();
 }
 
-function destroyWorker() {
-    if (workerEntry) {
-        if (workerEntry.timer) {
-            clearTimeout(workerEntry.timer);
-            workerEntry.timer = null;
-        }
+function retire(entry, error) {
+    if (entry.dead) return;
+    entry.dead = true;
 
-        let settled = false;
-        const finalize = () => {
-            if (settled) return;
-            settled = true;
-            try { workerEntry.worker.removeAllListeners(); } catch (_) {}
-            try { workerEntry.worker.terminate(); } catch (_) {}
-            workerEntry = null;
-        };
+    if (workerEntry === entry) workerEntry = null;
 
-        try {
-            workerEntry.worker.once('message', (msg) => {
-                if (msg && msg.type === '__shutdown_ack__') finalize();
-            });
-            workerEntry.worker.postMessage({ type: '__shutdown__' });
-            setTimeout(finalize, SHUTDOWN_GRACE_MS);
-        } catch (_) {
-            finalize();
-        }
+    if (entry.timer) {
+        clearTimeout(entry.timer);
+        entry.timer = null;
     }
+
+    const reject = entry.reject;
+    const wasBusy = entry.busy;
+    entry.resolve = null;
+    entry.reject = null;
+    entry.busy = false;
+
+    try { entry.worker.postMessage({ type: '__shutdown__' }); } catch (_) {}
+
+    setTimeout(() => {
+        try { entry.worker.terminate().catch(() => {}); } catch (_) {}
+    }, SHUTDOWN_GRACE_MS).unref();
+
+    if (wasBusy && reject) reject(error || new Error('Worker reiniciado'));
+
+    processQueue();
 }
 
 function runTask(entry, task, resolve, reject) {
     entry.busy = true;
     entry.lastUsed = Date.now();
-    entry.currentResolve = resolve;
-    entry.currentReject = reject;
+    entry.resolve = resolve;
+    entry.reject = reject;
 
     entry.timer = setTimeout(() => {
-        finishTask(entry, false, null, new Error('La tarea superó el tiempo límite (TASK_TIMEOUT)'));
-        destroyWorker();
+        retire(entry, new Error('La tarea superó el tiempo límite (TASK_TIMEOUT)'));
     }, TASK_TIMEOUT);
 
     try {
         entry.worker.postMessage(task);
     } catch (e) {
-        finishTask(entry, false, null, e);
-        destroyWorker();
+        retire(entry, e);
     }
 }
 
 function tryAssign(task, resolve, reject) {
-    if (!workerEntry) {
-        workerEntry = createWorker();
-    }
+    if (!workerEntry) workerEntry = createWorker();
 
     if (!workerEntry.busy) {
         runTask(workerEntry, task, resolve, reject);
@@ -137,24 +126,24 @@ function tryAssign(task, resolve, reject) {
 function processQueue() {
     while (queue.length) {
         const item = queue[0];
-        if (tryAssign(item.task, item.resolve, item.reject)) {
-            queue.shift();
-        } else {
-            break;
-        }
+        if (tryAssign(item.task, item.resolve, item.reject)) queue.shift();
+        else break;
     }
 }
 
 setInterval(() => {
-    const now = Date.now();
-    if (workerEntry && !workerEntry.busy && now - workerEntry.lastUsed > IDLE_TIMEOUT) {
-        destroyWorker();
+    if (workerEntry && !workerEntry.busy && Date.now() - workerEntry.lastUsed > IDLE_TIMEOUT) {
+        retire(workerEntry, null);
     }
-}, 10000);
+}, 10000).unref();
 
 export function dispatchMediaTask(task) {
     return new Promise((resolve, reject) => {
         if (!tryAssign(task, resolve, reject)) {
+            if (queue.length >= MAX_QUEUE) {
+                reject(new Error('Servidor ocupado, intenta de nuevo en unos segundos'));
+                return;
+            }
             queue.push({ task, resolve, reject });
         }
     });
@@ -166,6 +155,6 @@ export function getWorkerStats() {
         idle: workerEntry && !workerEntry.busy ? 1 : 0,
         queued: queue.length,
         total: workerEntry ? 1 : 0,
-        maxWorkers: 1,
+        maxWorkers: 1
     };
 }

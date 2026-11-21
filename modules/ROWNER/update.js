@@ -5,8 +5,6 @@ import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-const DEV_GROUP_JID = [ '120363412420888304@g.us', '50432955554@s.whatsapp.net' ];
-
 const runCmd = (cmd) => new Promise((resolve, reject) => {
     exec(cmd, (err, stdout, stderr) => {
         if (err) return reject(stderr || err.message);
@@ -22,9 +20,7 @@ export const updateCommand = {
             category: 'owner',
             rowner: true,
             run: async (m, { conn, args }) => {
-               /* if (m.chat !== DEV_GROUP_JID) {
-                    return conn.sendMessage(m.chat, { text: '• Acceso restringido al grupo de desarrollo oficial.' }, { quoted: m });
-                }*/
+            
 
                 try {
                     const HEAD_BEFORE = (await runCmd('git rev-parse HEAD')).trim();

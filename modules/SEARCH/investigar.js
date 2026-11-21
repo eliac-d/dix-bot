@@ -1,11 +1,11 @@
 import fetch from 'node-fetch';
 
 export const downloadsModule = {
-    category: 'tools',
+    category: 'search',
     commands: {
         investigar: {
             name: 'investigar',
-            alias: ['investigacion', 'inv', 'ai', 'research'],
+            alias: ['investigacion', 'inv', 'research'],
             run: async (m, { conn, text, command, usedPrefix }) => {
                 if (!text?.trim()) {
                     return conn.reply(m.chat, `*Uso:* ${usedPrefix + command} <tema o consulta a investigar>`, m);

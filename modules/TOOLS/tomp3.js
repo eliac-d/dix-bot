@@ -8,7 +8,7 @@ export const tomp3Command = {
     commands: {
         tomp3: {
             name: 'tomp3',
-            alias: ['toaudio', 'tomp3_2'],
+            alias: ['toaudio'],
             run: async (m, { conn }) => {
                 try {
                     let q = m.quoted ? m.quoted : m;

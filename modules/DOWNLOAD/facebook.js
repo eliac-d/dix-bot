@@ -1,4 +1,5 @@
 import fetch from 'node-fetch'
+import { DAILY_LIMIT_MESSAGE, assertNoLimit, isLimitError } from '../../src/utils/dixLimit.js';
 
 export const facebookDownloadModule = {
     category: 'descargas',
@@ -22,7 +23,7 @@ export const facebookDownloadModule = {
                         }
                     })
 
-                    const json = await response.json()
+                    const json = assertNoLimit(await response.json())
 
                     if (!json.success || !json.data || !json.data.data || !Array.isArray(json.data.data) || json.data.data.length === 0) {
                         throw new Error("No data found")
@@ -67,9 +68,10 @@ export const facebookDownloadModule = {
                     if (m.react) await m.react("✅")
 
                 } catch (e) {
-                    console.error(e)
                     if (m.react) await m.react("❌")
-                    m.reply("卍 Error al procesar Facebook. El video podría ser privado o el enlace ha expirado.\n\nUsa el comando *#report* para reportar este error.")
+                    if (isLimitError(e)) return m.reply(DAILY_LIMIT_MESSAGE)
+                    console.error(e)
+                    m.reply(`⍰ No se pudo descargar el contenido.\n\n> Posiblemente es privado o la URL no sea de un video de Facebook.\n> Por favor intenta de nuevo o intenta con otro link.`)
                 }
             }
         }

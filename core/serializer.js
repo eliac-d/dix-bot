@@ -172,7 +172,9 @@ export const smsg = async (conn, m) => {
         m.isGroup = m.chat.endsWith('@g.us');
         const botId = conn.user?.id ? conn.decodeJid(conn.user.id) : '';
         m.author = conn.decodeJid(m.key.participant || m.key.remoteJid || m.participant || botId);
-        m.sender = await global.getRealJid(conn, m.author, m).catch(() => m.author);
+        
+        
+        m.sender = m.author; 
 
         const storedContact = conn.contacts?.[m.sender] || conn.contacts?.[m.author];
         const dbName = global.db?.data?.users?.[m.sender]?.name;
@@ -281,7 +283,9 @@ export const smsg = async (conn, m) => {
 
             if (m.quoted.msg) {
                 m.quoted.text = String(m.quoted.msg?.text || m.quoted.msg?.caption || m.quoted.msg?.contentText || m.quoted.message?.conversation || '').trim();
-                m.quoted.sender = await global.getRealJid(conn, qParticipant, { ...m.quoted, chat: m.chat }).catch(() => qParticipant);
+                
+                
+                m.quoted.sender = qParticipant; 
 
                 const quotedContact = conn.contacts?.[m.quoted.sender] || conn.contacts?.[qParticipant];
                 const quotedDbName = global.db?.data?.users?.[m.quoted.sender]?.name;
