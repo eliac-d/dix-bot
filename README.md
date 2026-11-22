@@ -1,396 +1,358 @@
-<!-- ╭──────────────────────────────────────────────╮
-     │  ✿  Kiriti-Bot-MD · README kawaii edition  ✿  │
-     ╰──────────────────────────────────────────────╯ -->
+<!-- ◆ Kiriti-Bot-MD · README · Edición Black Swordsman ◆ -->
 
 <div align="center">
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:ffb6e1,50:c9a7ff,100:9ad7ff&height=230&section=header&text=Kiriti-Bot-MD&fontSize=62&fontColor=ffffff&fontAlignY=36&desc=%E2%9C%BF%20tu%20asistente%20kawaii%20para%20WhatsApp%20%E2%9C%BF&descSize=20&descAlignY=58&animation=fadeIn" width="100%" alt="Kiriti-Bot-MD"/>
+<img src="assets/header.svg" width="100%" alt="Kiriti-Bot-MD · Sistema de automatización para WhatsApp"/>
+
+<br/>
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://dix.lat/logo.svg?788">
   <source media="(prefers-color-scheme: light)" srcset="https://cdn.dix.lat/me/0lkj_20260829-c91x-2p9h-f407.png">
-  <img src="https://cdn.dix.lat/me/0lkj_20260829-c91x-2p9h-f407.png" alt="Kiriti-Bot-MD" width="230">
+  <img src="https://cdn.dix.lat/me/0lkj_20260829-c91x-2p9h-f407.png" alt="Kiriti-Bot-MD" width="210">
 </picture>
 
 <br/>
 
 <a href="#instalacion">
-  <img src="https://readme-typing-svg.demolab.com?font=Fredoka&weight=600&size=24&duration=3200&pause=900&color=FF7EB9&center=true&vCenter=true&multiline=false&width=620&height=45&lines=%E3%81%93%E3%82%93%E3%81%AB%E3%81%A1%E3%81%AF~+%E2%99%A1+Bienvenid%40+a+Kiriti-Bot;Stickers%2C+m%C3%BAsica%2C+juegos+e+IA+%E2%9C%A8;Instalado+en+tu+celular+en+minutos+%F0%9F%93%B1;Sin+saber+programar+%E2%80%94+solo+copia+y+pega+%F0%9F%92%96" alt="Typing SVG"/>
+  <img src="https://readme-typing-svg.demolab.com?font=Orbitron&weight=600&size=20&duration=3000&pause=1000&color=00C8FF&center=true&vCenter=true&width=640&height=42&lines=%E2%96%B8+LINK+START;%E2%96%B8+Bienvenido+al+sistema%2C+jugador;%E2%96%B8+Stickers+%C2%B7+M%C3%BAsica+%C2%B7+IA+%C2%B7+Grupos;%E2%96%B8+Sin+programar%3A+copia%2C+pega+y+listo" alt="Link Start"/>
 </a>
 
-<br/>
+<br/><br/>
 
-<img src="https://img.shields.io/badge/✿_Node.js-22%2B-ff9ecf?style=for-the-badge&logo=nodedotjs&logoColor=white&labelColor=2b2235" alt="Node 22+">
-<img src="https://img.shields.io/badge/✿_Android-Termux-c9a7ff?style=for-the-badge&logo=android&logoColor=white&labelColor=2b2235" alt="Termux">
-<img src="https://img.shields.io/badge/✿_Comandos-150%2B-9ad7ff?style=for-the-badge&logo=whatsapp&logoColor=white&labelColor=2b2235" alt="150+ comandos">
-<img src="https://img.shields.io/badge/✿_Online-24%2F7-a8f0c6?style=for-the-badge&logo=pm2&logoColor=white&labelColor=2b2235" alt="24/7">
+<img src="https://img.shields.io/badge/NODE.JS-22%2B-00c8ff?style=for-the-badge&logo=nodedotjs&logoColor=00c8ff&labelColor=0b1222" alt="Node 22+">
+<img src="https://img.shields.io/badge/ANDROID-TERMUX-00c8ff?style=for-the-badge&logo=android&logoColor=00c8ff&labelColor=0b1222" alt="Termux">
+<img src="https://img.shields.io/badge/COMANDOS-150%2B-00c8ff?style=for-the-badge&logo=whatsapp&logoColor=00c8ff&labelColor=0b1222" alt="150+ comandos">
+<img src="https://img.shields.io/badge/ESTADO-24%2F7-3cff9e?style=for-the-badge&logo=pm2&logoColor=3cff9e&labelColor=0b1222" alt="24/7">
 
-<a href="https://github.com/eliac-d/dix-bot/stargazers"><img src="https://img.shields.io/github/stars/eliac-d/dix-bot?style=flat-square&logo=github&logoColor=white&label=estrellitas&color=ff9ecf&labelColor=2b2235" alt="Stars"></a>
-<a href="https://github.com/eliac-d/dix-bot/network/members"><img src="https://img.shields.io/github/forks/eliac-d/dix-bot?style=flat-square&logo=git&logoColor=white&label=forks&color=c9a7ff&labelColor=2b2235" alt="Forks"></a>
-<img src="https://img.shields.io/badge/licencia-MIT-9ad7ff?style=flat-square&labelColor=2b2235" alt="MIT">
-<img src="https://img.shields.io/badge/hecho_con-%E2%99%A1-ff7eb9?style=flat-square&labelColor=2b2235" alt="Hecho con amor">
+<a href="https://github.com/eliac-d/dix-bot/stargazers"><img src="https://img.shields.io/github/stars/eliac-d/dix-bot?style=flat-square&logo=github&logoColor=white&label=stars&color=1f6feb&labelColor=0b1222" alt="Stars"></a>
+<a href="https://github.com/eliac-d/dix-bot/network/members"><img src="https://img.shields.io/github/forks/eliac-d/dix-bot?style=flat-square&logo=git&logoColor=white&label=forks&color=1f6feb&labelColor=0b1222" alt="Forks"></a>
+<img src="https://img.shields.io/badge/licencia-MIT-1f6feb?style=flat-square&labelColor=0b1222" alt="MIT">
+
+<br/><br/>
+
+<img src="assets/status.svg" width="760" alt="Estado del sistema: online, 150+ comandos, 15 categorías"/>
 
 </div>
 
 <br/>
 
-<!-- ─────────────── MENÚ PRINCIPAL ─────────────── -->
+<!-- ─────────────── MAIN MENU ─────────────── -->
 
 <div align="center">
 
-### ˚₊‧꒰ა ✧ Menú principal ✧ ໒꒱ ‧₊˚
+<h3>◆ &nbsp; M A I N &nbsp; M E N U &nbsp; ◆</h3>
 
 <table>
   <tr>
-    <td align="center" width="16%">
-      <a href="#que-es">
-        <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Animals/Cat%20Face.png" width="48"/><br/>
-        <sub><b>¿Qué es?</b></sub>
-      </a>
+    <td align="center" width="33%">
+      <a href="#que-es"><img src="https://img.shields.io/badge/◈_SISTEMA-0b1222?style=for-the-badge&labelColor=0b1222" alt="Sistema"/></a><br/>
+      <sub>Qué es Kiriti-Bot</sub>
     </td>
-    <td align="center" width="16%">
-      <a href="#funciones">
-        <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smilies/Star-Struck.png" width="48"/><br/>
-        <sub><b>Funciones</b></sub>
-      </a>
+    <td align="center" width="33%">
+      <a href="#habilidades"><img src="https://img.shields.io/badge/⚔_HABILIDADES-0b1222?style=for-the-badge&labelColor=0b1222" alt="Habilidades"/></a><br/>
+      <sub>Todo lo que puede hacer</sub>
     </td>
-    <td align="center" width="16%">
-      <a href="#instalacion">
-        <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Travel%20and%20places/Rocket.png" width="48"/><br/>
-        <sub><b>Instalar</b></sub>
-      </a>
+    <td align="center" width="33%">
+      <a href="#instalacion"><img src="https://img.shields.io/badge/▸_LINK_START-00c8ff?style=for-the-badge&labelColor=0b1222" alt="Instalar"/></a><br/>
+      <sub>Instalación paso a paso</sub>
     </td>
-    <td align="center" width="16%">
-      <a href="#usar">
-        <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Mobile%20Phone.png" width="48"/><br/>
-        <sub><b>Cómo usar</b></sub>
-      </a>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="#usar"><img src="https://img.shields.io/badge/✦_COMANDOS-0b1222?style=for-the-badge&labelColor=0b1222" alt="Comandos"/></a><br/>
+      <sub>Cómo usarlo en WhatsApp</sub>
     </td>
-    <td align="center" width="16%">
-      <a href="#siempre-activo">
-        <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Battery.png" width="48"/><br/>
-        <sub><b>24/7</b></sub>
-      </a>
+    <td align="center">
+      <a href="#siempre-activo"><img src="https://img.shields.io/badge/◉_MODO_24%2F7-0b1222?style=for-the-badge&labelColor=0b1222" alt="24/7"/></a><br/>
+      <sub>Que nunca se apague</sub>
     </td>
-    <td align="center" width="16%">
-      <a href="#ayuda">
-        <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Wrench.png" width="48"/><br/>
-        <sub><b>Ayuda</b></sub>
-      </a>
+    <td align="center">
+      <a href="#soporte"><img src="https://img.shields.io/badge/⚙_SOPORTE-0b1222?style=for-the-badge&labelColor=0b1222" alt="Soporte"/></a><br/>
+      <sub>Solución de problemas</sub>
     </td>
   </tr>
 </table>
 
 </div>
 
-<img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png" width="100%" alt="línea arcoíris"/>
+<img src="assets/divider.svg" width="100%" alt=""/>
 
 <a id="que-es"></a>
 
-## <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Animals/Cat%20Face.png" width="34"/> ¿Qué es Kiriti-Bot?
+## ◈ Sistema · ¿Qué es Kiriti-Bot?
 
-<table>
-<tr>
-<td>
-
-**Kiriti-Bot** es un ayudante que vive dentro de un número de WhatsApp ✿ Le escribes un comando como `#menu` o `#s` y él te responde al instante: hace **stickers**, descarga **música y videos**, juega contigo, modera tus **grupos** y hasta conversa con **inteligencia artificial**.
-
-> 🌸 **No necesitas saber programar.** Esta guía está pensada para que cualquier persona lo instale copiando y pegando, paso a paso.
-
-</td>
-</tr>
-</table>
+**Kiriti-Bot** es un asistente que vive dentro de un número de WhatsApp. Le escribes un comando como `#menu` y responde al instante: crea **stickers**, descarga **música y videos**, modera **grupos**, ofrece **juegos** y conversa con **inteligencia artificial**.
 
 > [!TIP]
-> 💖 **¿Tienes prisa?** Solo sigue los pasos **① → ② → ③ → ④** de la [instalación](#instalacion). Todo lo demás está guardadito en menús plegables para cuando lo necesites.
+> **▸ No necesitas saber programar.** Sigue los pisos **01 → 02 → 03 → 04** de la [instalación](#instalacion) copiando y pegando. Lo avanzado está guardado en menús plegables.
 
-<img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png" width="100%" alt="línea arcoíris"/>
+<img src="assets/divider.svg" width="100%" alt=""/>
 
-<a id="funciones"></a>
+<a id="habilidades"></a>
 
-## <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smilies/Star-Struck.png" width="34"/> Todo lo que sabe hacer
+## ⚔ Habilidades del sistema
 
 <div align="center">
 
 <table>
   <tr>
-    <td align="center" width="33%">
-      <h3>🎀 Stickers</h3>
-      <sub>Convierte fotos y videos en stickers, mezcla emojis y crea citas bonitas</sub><br/><br/>
+    <td width="33%" valign="top">
+      <b>▣ &nbsp;STICKERS</b><br/>
+      <sub>Fotos y videos a sticker, mezcla de emojis y citas con estilo.</sub><br/><br/>
       <code>#s</code> <code>#emojimix</code> <code>#qc</code>
     </td>
-    <td align="center" width="33%">
-      <h3>🎧 Descargas</h3>
-      <sub>Música y videos de YouTube, TikTok, Instagram, Facebook, Spotify, X y más</sub><br/><br/>
+    <td width="33%" valign="top">
+      <b>⇩ &nbsp;DESCARGAS</b><br/>
+      <sub>YouTube, TikTok, Instagram, Facebook, Spotify, X y más.</sub><br/><br/>
       <code>#play</code> <code>#tt</code> <code>#ig</code>
     </td>
-    <td align="center" width="33%">
-      <h3>🤖 Inteligencia artificial</h3>
-      <sub>Chatea con IA, crea imágenes desde texto y genera notas de voz</sub><br/><br/>
+    <td width="33%" valign="top">
+      <b>✵ &nbsp;INTELIGENCIA ARTIFICIAL</b><br/>
+      <sub>Chat con IA, imágenes desde texto y notas de voz.</sub><br/><br/>
       <code>#ia</code> <code>#aimg</code> <code>#voice</code>
     </td>
   </tr>
   <tr>
-    <td align="center">
-      <h3>🌸 Anime</h3>
-      <sub>Reacciones animadas: abrazos, besos, risas, llanto y muchas más</sub><br/><br/>
+    <td valign="top">
+      <b>⛨ &nbsp;GRUPOS</b><br/>
+      <sub>Antilink, antispam, advertencias, bienvenidas y menciones.</sub><br/><br/>
+      <code>#tag</code> <code>#warn</code> <code>#cerrar</code>
+    </td>
+    <td valign="top">
+      <b>⚒ &nbsp;HERRAMIENTAS</b><br/>
+      <sub>Traductor, clima, códigos QR, texto a voz, reconocer canciones.</sub><br/><br/>
+      <code>#trt</code> <code>#clima</code> <code>#shazam</code>
+    </td>
+    <td valign="top">
+      <b>⌕ &nbsp;BÚSQUEDAS</b><br/>
+      <sub>Pinterest, Wikipedia, YouTube e imágenes.</sub><br/><br/>
+      <code>#pin</code> <code>#yts</code> <code>#wiki</code>
+    </td>
+  </tr>
+  <tr>
+    <td valign="top">
+      <b>◇ &nbsp;ANIME</b><br/>
+      <sub>Reacciones animadas: abrazos, besos, risas y más.</sub><br/><br/>
       <code>#hug</code> <code>#kiss</code> <code>#happy</code>
     </td>
-    <td align="center">
-      <h3>💞 Gacha waifus</h3>
-      <sub>Colecciona personajes, arma tu harem y vota por tus favoritos</sub><br/><br/>
+    <td valign="top">
+      <b>♛ &nbsp;GACHA</b><br/>
+      <sub>Colecciona personajes, arma tu harem y vota por favoritos.</sub><br/><br/>
       <code>#rollwaifu</code> <code>#claim</code> <code>#harem</code>
     </td>
-    <td align="center">
-      <h3>🎮 Juegos</h3>
-      <sub>Trivia, ahorcado, piedra-papel-tijera, Akinator, tres en raya…</sub><br/><br/>
+    <td valign="top">
+      <b>♟ &nbsp;JUEGOS</b><br/>
+      <sub>Trivia, ahorcado, piedra-papel-tijera, Akinator, tres en raya.</sub><br/><br/>
       <code>#ppt</code> <code>#trivia</code> <code>#aki</code>
     </td>
   </tr>
   <tr>
-    <td align="center">
-      <h3>🛡️ Grupos</h3>
-      <sub>Antilink, antispam, advertencias, bienvenidas y menciones a todos</sub><br/><br/>
-      <code>#tag</code> <code>#warn</code> <code>#cerrar</code>
-    </td>
-    <td align="center">
-      <h3>🧰 Herramientas</h3>
-      <sub>Traductor, clima, códigos QR, texto a voz, reconocer canciones…</sub><br/><br/>
-      <code>#trt</code> <code>#clima</code> <code>#shazam</code>
-    </td>
-    <td align="center">
-      <h3>🔍 Búsquedas</h3>
-      <sub>Pinterest, Wikipedia, YouTube, imágenes de Google y más</sub><br/><br/>
-      <code>#pin</code> <code>#yts</code> <code>#wikipedia</code>
-    </td>
-  </tr>
-  <tr>
-    <td align="center">
-      <h3>✨ Diversión</h3>
-      <sub>Memes, frases, poemas, la bola 8 mágica y parejas del grupo</sub><br/><br/>
+    <td valign="top">
+      <b>✧ &nbsp;DIVERSIÓN</b><br/>
+      <sub>Memes, frases, poemas, bola 8 y tops del grupo.</sub><br/><br/>
       <code>#meme</code> <code>#8ball</code> <code>#top</code>
     </td>
-    <td align="center">
-      <h3>💌 Social</h3>
-      <sub>Tu perfil personal dentro del bot, ¡y hasta casarte con alguien!</sub><br/><br/>
+    <td valign="top">
+      <b>♡ &nbsp;SOCIAL</b><br/>
+      <sub>Perfil de jugador dentro del bot y matrimonios.</sub><br/><br/>
       <code>#perfil</code> <code>#marry</code>
     </td>
-    <td align="center">
-      <h3>🐰 Sub-bots</h3>
-      <sub>Convierte otros números en bots hijos conectados al principal</sub><br/><br/>
+    <td valign="top">
+      <b>↯ &nbsp;SUB-BOTS</b><br/>
+      <sub>Conecta otros números como bots enlazados al principal.</sub><br/><br/>
       <code>#serbot</code> <code>#bots</code>
     </td>
   </tr>
 </table>
 
-<sub>✧ Escribe <code>#menu</code> en WhatsApp para ver la lista completa de más de 150 comandos ✧</sub>
+<sub>▸ Escribe <code>#menu</code> en WhatsApp para ver los más de 150 comandos</sub>
 
 </div>
 
-<img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png" width="100%" alt="línea arcoíris"/>
+<img src="assets/divider.svg" width="100%" alt=""/>
 
-## <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Package.png" width="34"/> Lo que necesitas
+## ◆ Equipo necesario
 
 <div align="center">
 
-<table>
-  <tr>
-    <td align="center" width="33%">
-      <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Mobile%20Phone.png" width="56"/><br/>
-      <b>Un celular Android</b><br/>
-      <sub>¡El que ya tienes sirve!</sub>
-    </td>
-    <td align="center" width="33%">
-      <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Key.png" width="56"/><br/>
-      <b>Una API Key gratis</b><br/>
-      <sub>Se saca en <a href="https://dix.lat/login">dix.lat/login</a></sub>
-    </td>
-    <td align="center" width="33%">
-      <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Smilies/Pink%20Heart.png" width="56"/><br/>
-      <b>Un número de WhatsApp</b><br/>
-      <sub>Mejor uno distinto al personal</sub>
-    </td>
-  </tr>
-</table>
+| | Ítem | Dónde conseguirlo |
+|:--:|:--|:--|
+| **I** | Celular Android | El que ya tienes |
+| **II** | API Key gratuita | [dix.lat/login](https://dix.lat/login) |
+| **III** | Número de WhatsApp | Recomendado: distinto al personal |
 
 </div>
 
-<img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png" width="100%" alt="línea arcoíris"/>
+<img src="assets/divider.svg" width="100%" alt=""/>
 
 <a id="instalacion"></a>
 
-## <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Travel%20and%20places/Rocket.png" width="34"/> Instalación en Android
+## ▸ Link Start · Instalación en Android
 
 ```mermaid
 flowchart LR
-    A(["🌸 ① Instalar Termux"]) --> B(["🍡 ② Preparar"])
-    B --> C(["🚀 ③ Instalar bot"])
-    C --> D(["🔑 ④ API Key"])
-    D --> E(["💌 Vincular WhatsApp"])
-    E --> F(("✨ ONLINE"))
+    A["FLOOR 01<br/>Instalar Termux"] --> B["FLOOR 02<br/>Preparar"]
+    B --> C["FLOOR 03<br/>Instalar bot"]
+    C --> D["FLOOR 04<br/>API Key + WhatsApp"]
+    D --> E(("ONLINE"))
 
-    classDef pink fill:#ffd6ea,stroke:#ff7eb9,stroke-width:2px,color:#4a2340
-    classDef lila fill:#e6dcff,stroke:#a78bfa,stroke-width:2px,color:#2e2350
-    classDef blue fill:#d6efff,stroke:#5bb8ff,stroke-width:2px,color:#16324a
-    classDef mint fill:#c9f7dd,stroke:#34c77b,stroke-width:3px,color:#0f3b25
-    class A,D pink
-    class B,E lila
-    class C blue
-    class F mint
+    classDef floor fill:#0b1222,stroke:#00c8ff,stroke-width:2px,color:#e6f6ff
+    classDef boss fill:#00c8ff,stroke:#7fdbff,stroke-width:3px,color:#05070d
+    class A,B,C,D floor
+    class E boss
 ```
 
 <br/>
 
-### 🌸 ① Instalar Termux
+### ◆ FLOOR 01 · Instalar Termux
 
 <details open>
-<summary><b>✿ Ver pasos</b></summary>
+<summary><b>▸ Ver pasos</b></summary>
 
 <br/>
 
-Termux es una app gratuita que permite que tu celular ejecute el bot. Piensa en ella como la "casita" donde vivirá Kiriti 🏡
+Termux es una app gratuita que permite a tu celular ejecutar el bot. Es la base donde vivirá Kiriti.
 
 > [!WARNING]
-> 🚫 **No la descargues de Google Play.** Esa versión está vieja y rompe la instalación.
+> **No la descargues de Google Play.** Esa versión está desactualizada y rompe la instalación.
 
-Descárgala desde aquí:
+<a href="https://f-droid.org/packages/com.termux/"><img src="https://img.shields.io/badge/F--DROID-RECOMENDADO-00c8ff?style=for-the-badge&logo=fdroid&logoColor=00c8ff&labelColor=0b1222" alt="F-Droid"></a>
+<a href="https://github.com/termux/termux-app/releases/latest"><img src="https://img.shields.io/badge/GITHUB-ARM64--V8A-1f6feb?style=for-the-badge&logo=github&logoColor=white&labelColor=0b1222" alt="GitHub Releases"></a>
 
-<a href="https://f-droid.org/packages/com.termux/"><img src="https://img.shields.io/badge/F--Droid-Recomendado_♡-ff9ecf?style=for-the-badge&logo=fdroid&logoColor=white&labelColor=2b2235" alt="F-Droid"></a>
-<a href="https://github.com/termux/termux-app/releases/latest"><img src="https://img.shields.io/badge/GitHub-arm64--v8a-c9a7ff?style=for-the-badge&logo=github&logoColor=white&labelColor=2b2235" alt="GitHub Releases"></a>
-
-Instálala y ábrela. Verás una pantalla negra con letras: ¡es normal! ✨
+Instálala y ábrela. Verás una pantalla negra con texto: es lo normal.
 
 </details>
 
-### 🍡 ② Preparar Termux
+### ◆ FLOOR 02 · Preparar Termux
 
 <details open>
-<summary><b>✿ Ver comandos</b></summary>
+<summary><b>▸ Ver comandos</b></summary>
 
 <br/>
 
-> 💡 **Cómo pegar en Termux:** mantén el dedo presionado sobre la pantalla → toca **Paste**.
+> **Cómo pegar en Termux:** mantén el dedo presionado sobre la pantalla → toca **Paste**.
 
-**Paso A** · Actualiza todo (si te pregunta algo, presiona **Enter** o escribe `y`):
+**A ·** Actualiza el sistema (si pregunta algo, presiona **Enter** o escribe `y`):
 
 ```bash
 pkg update -y && pkg upgrade -y
 ```
 
-**Paso B** · Instala las herramientas necesarias:
+**B ·** Instala las herramientas:
 
 ```bash
 pkg install -y git nodejs
 ```
 
-**Paso C** · Revisa la versión:
+**C ·** Comprueba la versión:
 
 ```bash
 node -v
 ```
 
-✅ Debe aparecer `v22` o un número mayor.
+Debe mostrar `v22` o superior.
 
 > [!NOTE]
-> Si sale un número menor, ejecuta `pkg upgrade -y` y vuelve a revisar.
+> Si muestra una versión menor, ejecuta `pkg upgrade -y` y vuelve a comprobar.
 
 </details>
 
-### 🚀 ③ Instalar y encender el bot
+### ◆ FLOOR 03 · Instalar y encender el bot
 
 <details open>
-<summary><b>✿ Ver el comando mágico</b></summary>
+<summary><b>▸ Ver comando</b></summary>
 
 <br/>
 
-Copia **todo** este comando de una sola vez. Descarga, instala y enciende el bot automáticamente 🪄
+Copia el comando **completo**. Descarga, instala y enciende el bot automáticamente:
 
 ```bash
 git clone https://github.com/eliac-d/dix-bot.git && cd dix-bot && npm install && npm start
 ```
 
-☕ Espera unos minutitos. Cuando termine, verás el mensaje de bienvenida de Kiriti.
+Espera unos minutos. Al terminar, verás el mensaje de bienvenida del bot.
 
 </details>
 
-### 🔑 ④ Primera configuración
+### ◆ FLOOR 04 · Primera configuración
 
 <details open>
-<summary><b>✿ API Key y vincular WhatsApp</b></summary>
+<summary><b>▸ API Key y vinculación de WhatsApp</b></summary>
 
 <br/>
 
-#### 🗝️ 4.1 · Tu API Key
+#### 4.1 · API Key
 
-| | |
+| Paso | Acción |
 |:--:|:--|
-| **1** | Entra a [dix.lat/login](https://dix.lat/login) desde tu navegador |
+| **1** | Entra a [dix.lat/login](https://dix.lat/login) desde el navegador |
 | **2** | Crea tu cuenta o inicia sesión |
 | **3** | Copia tu clave (empieza con `dix_`) |
 | **4** | Vuelve a Termux, pégala y presiona **Enter** |
 
-💾 El bot la guarda y no te la vuelve a pedir.
+El bot la guarda y no la vuelve a pedir.
 
-#### 💌 4.2 · Vincular WhatsApp
+#### 4.2 · Vincular WhatsApp
 
 Escribe el número del bot **con código de país**, sin `+` ni espacios:
 
 ```text
-Ejemplo para Honduras → 50499999999
-Ejemplo para Perú     → 51999999999
+Honduras  →  50499999999
+Perú      →  51999999999
 ```
 
-Aparecerá un **código de 8 dígitos**. Ahora abre WhatsApp en el celular de ese número:
+Aparecerá un **código de 8 dígitos**. En el WhatsApp de ese número:
 
 ```text
-⚙️ Ajustes → 🔗 Dispositivos vinculados → ➕ Vincular un dispositivo
-→ 📞 Vincular con número de teléfono → escribe el código
+Ajustes → Dispositivos vinculados → Vincular un dispositivo
+→ Vincular con número de teléfono → escribe el código
 ```
 
-🎉 Cuando Termux muestre **`ONLINE`**, ¡Kiriti ya está vivo!
+Cuando Termux muestre **`ONLINE`**, el bot ya está en línea.
 
 > [!CAUTION]
-> No cierres Termux durante la vinculación. Si se interrumpe, borra la carpeta `sessions/main` y repite este paso.
+> No cierres Termux durante la vinculación. Si se interrumpe, borra `sessions/main` y repite este paso.
 
 </details>
 
-<img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png" width="100%" alt="línea arcoíris"/>
+<img src="assets/divider.svg" width="100%" alt=""/>
 
 <a id="usar"></a>
 
-## <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Mobile%20Phone.png" width="34"/> Cómo usarlo en WhatsApp
+## ✦ Comandos en WhatsApp
 
-Todos los comandos empiezan con un símbolo. Puedes usar cualquiera de estos: **`#`** **`!`** **`.`** **`/`**
+Todos los comandos empiezan con un prefijo. Puedes usar cualquiera: **`#`** &nbsp; **`!`** &nbsp; **`.`** &nbsp; **`/`**
 
 <div align="center">
 
-| 💬 Escribe esto | ✨ Y pasa esto |
+| Escribe | Resultado |
 |:--|:--|
-| `#menu` | Te muestra todos los comandos 📜 |
-| `#ping` | Comprueba que el bot está despierto 🏓 |
-| `#s` *(respondiendo a una foto)* | Convierte la foto en sticker 🎀 |
-| `#play nombre de canción` | Te envía la canción en audio 🎧 |
-| `#tt enlace de TikTok` | Descarga el video sin marca de agua 🎬 |
-| `#ia pregunta` | Responde con inteligencia artificial 🤖 |
-| `#rollwaifu` | Te sale un personaje aleatorio 💞 |
-| `#hug @amigo` | Le envía un abrazo animado 🫂 |
+| `#menu` | Muestra todos los comandos |
+| `#ping` | Comprueba que el bot responde |
+| `#s` *(respondiendo a una foto)* | Convierte la foto en sticker |
+| `#play nombre de la canción` | Envía la canción en audio |
+| `#tt enlace de TikTok` | Descarga el video |
+| `#ia tu pregunta` | Responde con inteligencia artificial |
+| `#rollwaifu` | Obtienes un personaje aleatorio |
+| `#hug @usuario` | Envía un abrazo animado |
 
 </div>
 
-<img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png" width="100%" alt="línea arcoíris"/>
+<img src="assets/divider.svg" width="100%" alt=""/>
 
 <a id="siempre-activo"></a>
 
-## <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Battery.png" width="34"/> Mantenerlo activo 24/7
+## ◉ Modo 24/7
 
 <details>
-<summary><b>🔋 Evitar que Android apague el bot</b></summary>
+<summary><b>▸ Evitar que Android apague el bot</b></summary>
 
 <br/>
 
-Primero detén el bot con <kbd>Ctrl</kbd> + <kbd>C</kbd> (en Termux: botón `CTRL` + `C`, o `Volumen abajo + C`).
+Detén el bot con <kbd>Ctrl</kbd> + <kbd>C</kbd> (en Termux: botón `CTRL` + `C`, o `Volumen abajo + C`).
 
-Instala **PM2**, el "guardián" que mantiene a Kiriti despierto:
+Instala **PM2**, el guardián que mantiene el bot encendido:
 
 ```bash
 npm install -g pm2
@@ -398,19 +360,19 @@ pm2 start npm --name kiriti -- start
 pm2 save
 ```
 
-Luego aplica estos tres cuidados 💤:
+Después aplica estos tres ajustes:
 
 ```bash
 termux-wake-lock
 ```
 
-- 🔋 Batería: **Ajustes → Apps → Termux → Batería → Sin restricciones**
-- 🙅 No cierres Termux desde las apps recientes
+- Batería: **Ajustes → Apps → Termux → Batería → Sin restricciones**
+- No cierres Termux desde las apps recientes
 
 </details>
 
 <details>
-<summary><b>🔁 Que se encienda solo al reiniciar el celular</b></summary>
+<summary><b>▸ Encender automáticamente al reiniciar el celular</b></summary>
 
 <br/>
 
@@ -428,28 +390,28 @@ chmod +x ~/.termux/boot/kiriti.sh
 
 </details>
 
-### 🎛️ Control remoto del bot
+### ◆ Panel de control
 
 <div align="center">
 
-| | Quiero… | Comando |
+| | Acción | Comando |
 |:--:|:--|:--|
-| 🟢 | Ver si está encendido | `pm2 status` |
-| 👀 | Ver qué está pasando | `pm2 logs kiriti` |
-| 🔄 | Reiniciarlo | `pm2 restart kiriti` |
-| 🔴 | Apagarlo | `pm2 stop kiriti` |
-| ⬆️ | Actualizarlo | `cd dix-bot && git pull && npm install && pm2 restart kiriti` |
+| ◉ | Ver si está encendido | `pm2 status` |
+| ◎ | Ver la actividad | `pm2 logs kiriti` |
+| ↻ | Reiniciar | `pm2 restart kiriti` |
+| ■ | Apagar | `pm2 stop kiriti` |
+| ⇧ | Actualizar | `cd dix-bot && git pull && npm install && pm2 restart kiriti` |
 
 </div>
 
-<img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png" width="100%" alt="línea arcoíris"/>
+<img src="assets/divider.svg" width="100%" alt=""/>
 
-<a id="ayuda"></a>
+<a id="soporte"></a>
 
-## <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Wrench.png" width="34"/> ¿Algo salió mal? No pasa nada (｡•́︿•̀｡)
+## ⚙ Soporte del sistema
 
 <details>
-<summary><b>💥 Sale error al ejecutar <code>npm install</code></b></summary>
+<summary><b>▸ Error al ejecutar <code>npm install</code></b></summary>
 
 <br/>
 
@@ -461,7 +423,7 @@ npm install
 </details>
 
 <details>
-<summary><b>📉 Node.js es menor a la versión 22</b></summary>
+<summary><b>▸ Node.js es menor a la versión 22</b></summary>
 
 <br/>
 
@@ -474,7 +436,7 @@ Vuelve a comprobar con `node -v`.
 </details>
 
 <details>
-<summary><b>🔑 Mi API Key no funciona</b></summary>
+<summary><b>▸ Mi API Key no funciona</b></summary>
 
 <br/>
 
@@ -483,7 +445,7 @@ Cópiala completa desde [dix.lat/login](https://dix.lat/login). Debe verse así:
 </details>
 
 <details>
-<summary><b>♻️ Quiero cambiar la API Key</b></summary>
+<summary><b>▸ Quiero cambiar la API Key</b></summary>
 
 <br/>
 
@@ -502,7 +464,7 @@ pm2 start kiriti
 </details>
 
 <details>
-<summary><b>📱 Quiero vincular otro número de WhatsApp</b></summary>
+<summary><b>▸ Quiero vincular otro número de WhatsApp</b></summary>
 
 <br/>
 
@@ -515,7 +477,7 @@ npm start
 </details>
 
 <details>
-<summary><b>😴 El bot deja de responder después de unas horas</b></summary>
+<summary><b>▸ El bot deja de responder después de unas horas</b></summary>
 
 <br/>
 
@@ -529,25 +491,25 @@ Y que Termux tenga la batería en **Sin restricciones**.
 
 </details>
 
-<img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png" width="100%" alt="línea arcoíris"/>
+<img src="assets/divider.svg" width="100%" alt=""/>
 
-## <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Desktop%20Computer.png" width="34"/> Otros lugares donde puede vivir
+## ◇ Otros servidores
 
 <div align="center">
 
-| Entorno | | Ideal para |
+| Entorno | Estado | Ideal para |
 |:--|:--:|:--|
-| 📱 Android · Termux | 💖 | Empezar rápido con tu propio celular |
-| 🐧 Linux · Debian, Ubuntu, Arch, Alpine | ✅ | Servidores y equipos dedicados |
-| ☁️ VPS o máquina virtual | ✅ | Funcionar sin parar con systemd o PM2 |
-| 🐳 Docker o Podman | ✅ | Instalaciones aisladas y reproducibles |
-| 🍎 macOS | ✅ | Desarrollo y pruebas |
-| 🪟 Windows · WSL2 | ✅ | Desarrollo y pruebas |
+| Android · Termux | ◆ | Empezar rápido con tu propio celular |
+| Linux · Debian, Ubuntu, Arch, Alpine | ✓ | Servidores y equipos dedicados |
+| VPS o máquina virtual | ✓ | Operación continua con systemd o PM2 |
+| Docker o Podman | ✓ | Despliegues aislados y reproducibles |
+| macOS | ✓ | Desarrollo y pruebas |
+| Windows · WSL2 | ✓ | Desarrollo y pruebas |
 
 </div>
 
 <details>
-<summary><b>🐧 Linux · Debian, Ubuntu, Arch, Alpine</b></summary>
+<summary><b>▸ Linux · Debian, Ubuntu, Arch, Alpine</b></summary>
 
 <br/>
 
@@ -572,7 +534,7 @@ sudo pacman -S git nodejs npm
 sudo apk add git nodejs npm
 ```
 
-Después instala el bot igual que en el paso ③:
+Después instala el bot igual que en el FLOOR 03:
 
 ```bash
 git clone https://github.com/eliac-d/dix-bot.git && cd dix-bot && npm install && npm start
@@ -581,7 +543,7 @@ git clone https://github.com/eliac-d/dix-bot.git && cd dix-bot && npm install &&
 </details>
 
 <details>
-<summary><b>🍎 macOS</b></summary>
+<summary><b>▸ macOS</b></summary>
 
 <br/>
 
@@ -599,7 +561,7 @@ nvm install 22 && nvm use 22
 </details>
 
 <details>
-<summary><b>🪟 Windows · WSL2</b></summary>
+<summary><b>▸ Windows · WSL2</b></summary>
 
 <br/>
 
@@ -614,7 +576,7 @@ Dentro de Ubuntu, sigue los pasos de **Linux · Debian, Ubuntu, Arch, Alpine**.
 </details>
 
 <details>
-<summary><b>🐳 Docker o Podman</b></summary>
+<summary><b>▸ Docker o Podman</b></summary>
 
 <br/>
 
@@ -640,11 +602,11 @@ La carpeta `sessions/` guarda la API Key y la sesión de WhatsApp entre reinicio
 </details>
 
 <details>
-<summary><b>☁️ VPS o máquina virtual · systemd</b></summary>
+<summary><b>▸ VPS o máquina virtual · systemd</b></summary>
 
 <br/>
 
-Recomendado si quieres que el bot arranque solo junto con el sistema.
+Recomendado si quieres que el bot arranque junto con el sistema operativo.
 
 Crea el archivo `/etc/systemd/system/kiriti.service`:
 
@@ -683,7 +645,7 @@ journalctl -u kiriti -f
 </details>
 
 <details>
-<summary><b>☁️ VPS o VM con PM2 en vez de systemd</b></summary>
+<summary><b>▸ VPS o VM con PM2 en vez de systemd</b></summary>
 
 <br/>
 
@@ -698,32 +660,28 @@ Ejecuta el comando que `pm2 startup` muestre en pantalla antes de `pm2 save`.
 
 </details>
 
-<img src="https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/rainbow.png" width="100%" alt="línea arcoíris"/>
+<img src="assets/divider.svg" width="100%" alt=""/>
 
-## <img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Objects/Shield.png" width="34"/> Uso responsable
+## ⛨ Código de honor
 
 > [!IMPORTANT]
-> 🌷 Kiriti-Bot es un proyecto de código abierto, **no afiliado a Meta ni a WhatsApp**. Úsalo con cariño: nada de spam, respeta a las personas de tus grupos y los Términos de Servicio de WhatsApp.
+> Kiriti-Bot es un proyecto de código abierto, **no afiliado a Meta ni a WhatsApp**. Úsalo con responsabilidad: sin spam, con respeto a los miembros de tus grupos y a los Términos de Servicio de WhatsApp.
 
 <br/>
 
 <div align="center">
 
-<img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Activities/Party%20Popper.png" width="60"/>
-
-### ¡Gracias por usar Kiriti-Bot! ˚ʚ♡ɞ˚
-
-<sub>Si te gustó, regálale una ⭐ al repositorio, ¡nos hace muy felices!</sub>
+<a href="https://dix.lat"><img src="https://img.shields.io/badge/DIX.LAT-00c8ff?style=for-the-badge&logo=googlechrome&logoColor=00c8ff&labelColor=0b1222" alt="dix.lat"></a>
+<a href="https://github.com/eliac-d/dix-bot"><img src="https://img.shields.io/badge/REPOSITORIO-00c8ff?style=for-the-badge&logo=github&logoColor=00c8ff&labelColor=0b1222" alt="Repositorio"></a>
+<a href="https://dix.lat/login"><img src="https://img.shields.io/badge/API_KEY-00c8ff?style=for-the-badge&logo=keybase&logoColor=00c8ff&labelColor=0b1222" alt="API Key"></a>
 
 <br/><br/>
 
-<a href="https://dix.lat"><img src="https://img.shields.io/badge/🌐_dix.lat-ff9ecf?style=for-the-badge&labelColor=2b2235" alt="dix.lat"></a>
-<a href="https://github.com/eliac-d/dix-bot"><img src="https://img.shields.io/badge/📦_Repositorio-c9a7ff?style=for-the-badge&labelColor=2b2235" alt="Repositorio"></a>
-<a href="https://dix.lat/login"><img src="https://img.shields.io/badge/🔑_API_Key-9ad7ff?style=for-the-badge&labelColor=2b2235" alt="API Key"></a>
+<sub>Si el proyecto te sirve, apóyalo con una ⭐ en el repositorio.</sub>
 
 <br/><br/>
 
-<sub>Desarrollado y mantenido con ♡ por <strong>Dix System</strong></sub>
+<sub>Desarrollado y mantenido por <strong>Dix System</strong></sub>
 
 <br/>
 
@@ -731,10 +689,12 @@ Ejecuta el comando que `pm2 startup` muestre en pantalla antes de `pm2 save`.
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="https://dix.lat/icon.svg?67">
     <source media="(prefers-color-scheme: light)" srcset="https://cdn.dix.lat/me/0lkj_20260829-c91x-2p9h-f407.png">
-    <img src="https://cdn.dix.lat/me/0lkj_20260829-c91x-2p9h-f407.png" alt="Dix" width="150">
+    <img src="https://cdn.dix.lat/me/0lkj_20260829-c91x-2p9h-f407.png" alt="Dix" width="140">
   </picture>
 </a>
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:9ad7ff,50:c9a7ff,100:ffb6e1&height=130&section=footer" width="100%" alt="footer"/>
+<br/>
+
+<img src="assets/footer.svg" width="100%" alt="Logout"/>
 
 </div>
