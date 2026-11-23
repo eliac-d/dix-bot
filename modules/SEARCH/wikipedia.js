@@ -10,7 +10,7 @@ export const wikipediaCommand = {
                 m.react('🔍');
 
                 try {
-                    const response = await fetch(`https://dix.lat/v1/wikipedia?q=${encodeURIComponent(text)}`);
+                    const response = await fetch(`https://dix.lat/v1/wikipedia?q=${encodeURIComponent(text)}&apikey=${apikey}`);
                     const json = await response.json();
 
                     if (!json.success || !json.data || !json.data.answer) {

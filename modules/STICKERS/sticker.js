@@ -144,7 +144,7 @@ export const stickerCommand = {
             run: async (m, { conn, args, store }) => {
                 try {
                     let q = m.quoted ? m.quoted : m;
-                    
+
                     let isViewOnce = (q.msg || q).viewOnce || (q.message && Object.values(q.message)[0]?.viewOnce);
                     if (isViewOnce) {
                         await m.react('❌');
@@ -219,8 +219,9 @@ export const stickerCommand = {
                                 } catch (e) {
                                     try {
                                         return await (await pix.read(item.buffer))
-                                            .resize(512, 512, { fit: 'contain' })
-                                            .webp({ quality: 75, loop: 0 })
+                                            .ensureAlpha()
+                                            .resize(512, 512, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
+                                            .webp({ quality: 75, alphaQuality: 100, loop: 0 })
                                             .toBuffer();
                                     } catch (err) {
                                         return null;
@@ -235,14 +236,16 @@ export const stickerCommand = {
                         }
 
                         let trayBuffer = await (await pix.read(downloadedBuffers[0].buffer))
-                            .resize(96, 96)
+                            .ensureAlpha()
+                            .resize(96, 96, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
                             .png()
                             .toBuffer()
                             .catch(() => null);
 
                         if (!trayBuffer) {
                             trayBuffer = await (await pix.read(processedStickers[0]))
-                                .resize(96, 96)
+                                .ensureAlpha()
+                                .resize(96, 96, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
                                 .png()
                                 .toBuffer()
                                 .catch(() => null);

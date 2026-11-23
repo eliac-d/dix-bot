@@ -25,7 +25,7 @@ export const spotifyDownloadModule = {
                         trackUrl = text;
                         trackInfo = { title: 'Spotify Track', artist: 'Desconocido', album: '-', duration: '-', year: '-' };
                     } else {
-                        const searchRes = await fetch(`${SEARCH_URL}?q=${encodeURIComponent(text)}&limit=1`);
+                        const searchRes = await fetch(`${SEARCH_URL}?q=${encodeURIComponent(text)}&limit=1&apikey=${apikey}`);
                         const searchData = assertNoLimit(await searchRes.json());
 
                         if (!searchData.success || !searchData.data || !searchData.data.results || searchData.data.results.length === 0) {

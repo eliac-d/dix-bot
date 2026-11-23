@@ -15,7 +15,7 @@ export const pinterest = {
                     const { json } = await dispatchMediaTask({
                         type: 'fetch_json',
                         method: 'GET',
-                        url: `https://dix.lat/v1/pinterest?q=${encodeURIComponent(text)}`,
+                        url: `https://dix.lat/v1/pinterest?q=${encodeURIComponent(text)}&apikey=${apikey}`,
                         headers: { 'Accept': 'application/json' }
                     });
 

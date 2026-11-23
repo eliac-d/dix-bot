@@ -1,5 +1,9 @@
 import axios from 'axios';
 
+const DIX_HEADERS = {
+    'x-api-key': apikey
+};
+
 export const ttsCommand = {
     category: 'tools',
     commands: {
@@ -23,7 +27,9 @@ export const ttsCommand = {
                     }
 
                     if (!targetText || !targetText.trim()) {
-                        const menuRes = await axios.get('https://dix.lat/v1/tts');
+                        const menuRes = await axios.get('https://dix.lat/v1/tts', {
+                            headers: DIX_HEADERS
+                        });
                         const data = menuRes.data;
 
                         let menuText = `🗣️ *OPCIONES DE VOZ DISPONIBLES*\n\n`;
@@ -61,6 +67,7 @@ export const ttsCommand = {
 
                     const response = await axios.get('https://dix.lat/v1/tts', {
                         params: queryParams,
+                        headers: DIX_HEADERS,
                         responseType: 'arraybuffer'
                     });
 

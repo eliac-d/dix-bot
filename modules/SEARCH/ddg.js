@@ -104,7 +104,7 @@ async function sendAlbum(conn, jid, urls, options = {}) {
 }
 
 async function searchWeb(m, conn, query) {
-    const url = `https://dix.lat/v1/duckduckgo?q=${encodeURIComponent(query)}&type=web`;
+    const url = `https://dix.lat/v1/duckduckgo?q=${encodeURIComponent(query)}&type=web&apikey=${apikey}`;
     const json = await fetchJson(url);
 
     const results = json?.data?.results;
@@ -129,7 +129,7 @@ async function searchWeb(m, conn, query) {
 }
 
 async function searchImages(m, conn, query) {
-    const url = `https://dix.lat/v1/duckduckgo?q=${encodeURIComponent(query)}&type=images`;
+    const url = `https://dix.lat/v1/duckduckgo?q=${encodeURIComponent(query)}&type=images&apikey=${apikey}`;
     const json = await fetchJson(url);
 
     const rawResults = json?.data?.results;

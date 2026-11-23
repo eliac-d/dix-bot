@@ -24,7 +24,7 @@ function formatLyrics(title, artist, lyrics, extra = {}) {
 
 async function getLyricsFromDix(query) {
   try {
-    const url = `https://dix.lat/v1/letters?q=${encodeURIComponent(query)}`;
+    const url = `https://dix.lat/v1/letters?q=${encodeURIComponent(query)}&apikey=${apikey}`;
     const res = await fetch(url, { headers: HEADERS });
     if (!res.ok) return null;
 

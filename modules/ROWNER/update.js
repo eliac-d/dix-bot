@@ -16,7 +16,7 @@ export const updateCommand = {
     commands: {
         update: {
             name: 'update',
-            alias: ['actualizar', 'up', 'sync'],
+            alias: ['actualizar', 'up', 'u0'],
             category: 'owner',
             rowner: true,
             run: async (m, { conn, args }) => {

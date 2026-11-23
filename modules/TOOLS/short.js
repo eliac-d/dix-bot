@@ -7,17 +7,18 @@ export const shortCommand = {
             name: 'short',
             alias: ['acortar', 'short', 'corta'],
             run: async (m, { text }) => {
-                const apiVercel = 'https://dix.lat/short';
+                const api = 'https://dix.lat/short';
 
                 if (!text) return m.reply('> ✎ ɪɴғᴏ: ɪɴɢʀᴇsᴀ ᴇʟ ᴇɴʟᴀᴄᴇ.');
 
                 try {
                     await m.react('🕓');
 
-                    const res = await fetch(apiVercel, {
+                    const res = await fetch(api, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ url: text })
+                        body: JSON.stringify({ url: text }),
+                        'x-api-key': apikey,
                     });
 
                     

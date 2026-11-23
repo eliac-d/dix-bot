@@ -38,7 +38,7 @@ export const teraboxDownloadModule = {
                 try {
                     if (m.react) await m.react("⏳")
 
-                    const res = await fetch(`https://dix.lat/v1/d/terabox?url=${encodeURIComponent(args[0])}`, {
+                    const res = await fetch(`https://dix.lat/v1/d/terabox?url=${encodeURIComponent(args[0])}&apikey=${apikey}`, {
                         headers: {
                             'x-api-key': apikey,
                             'Accept': 'application/json'
