@@ -8,6 +8,7 @@ import pino from 'pino';
 import NodeCache from 'node-cache';
 import yargs from 'yargs';
 import { Boom } from '@hapi/boom';
+import * as baileysNs from '@whiskeysockets/baileys';
 import { makeWASocket, makeCacheableSignalKeyStore, useMultiFileAuthState, DisconnectReason } from '@whiskeysockets/baileys';
 
 import { smsg } from './core/serializer.js';
@@ -173,9 +174,30 @@ global.__dirname = (pathURL) => path.dirname(global.__filename(pathURL, true));
 global.opts = new Object(yargs(process.argv.slice(2)).exitProcess(false).parse());
 global.prefix = new RegExp('^[#!./]');
 
+const FALLBACK_VERSION = [2, 3000, 1043716065];
+
+const resolveVersion = async () => {
+    if (typeof baileysNs.fetchLatestBaileysVersion !== 'function') return FALLBACK_VERSION;
+    try {
+        const result = await Promise.race([
+            baileysNs.fetchLatestBaileysVersion(),
+            new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), 8000))
+        ]);
+        return Array.isArray(result?.version) && result.version.length === 3 ? result.version : FALLBACK_VERSION;
+    } catch (_) {
+        return FALLBACK_VERSION;
+    }
+};
+
 const { state, saveCreds } = await useMultiFileAuthState(sessionDir);
-const version = [2, 3000, 1043716065];
+const version = await resolveVersion();
+log.info(`Versión de WhatsApp: ${version.join('.')}`);
 const msgRetryCounterCache = new NodeCache({ stdTTL: 3600, checkperiod: 600 });
+
+let pairingNumber = '';
+if (!state.creds.registered) {
+    pairingNumber = String(await ask('Número del bot con código de país (ej: 51999999999)') || '').replace(/\D/g, '');
+}
 
 const connectionOptions = {
     version,
@@ -196,6 +218,24 @@ const connectionOptions = {
     getMessage: async () => undefined
 };
 
+const setupPairing = (sock) => {
+    global._requestPairing = null;
+    if (!pairingNumber || sock.authState?.creds?.registered) return;
+    let requested = false;
+    const request = async () => {
+        if (requested || sock.authState?.creds?.registered) return;
+        requested = true;
+        try {
+            const codeBot = await sock.requestPairingCode(pairingNumber);
+            pairingCard(codeBot?.match(/.{1,4}/g)?.join('-') || codeBot);
+        } catch (e) {
+            console.error('[pairing]', e?.message || e);
+        }
+    };
+    global._requestPairing = request;
+    setTimeout(request, 6000);
+};
+
 global.conn = makeWASocket(connectionOptions);
 initPreview(global.conn);
 initButtons(global.conn);
@@ -203,6 +243,7 @@ initGlobals(global.conn);
 global.conn.ev.on('creds.update', saveCreds);
 global.conn.isMain = true;
 global.conns.set('main', global.conn);
+setupPairing(global.conn);
 
 global._reconnectAttempts = 0;
 let _authFailedAttempts = 0;
@@ -217,17 +258,6 @@ function getReconnectDelay() {
     const jitter = base * (0.8 + Math.random() * 0.4);
     global._reconnectAttempts++;
     return Math.round(jitter);
-}
-
-if (!state.creds.registered) {
-    const phoneNumber = await ask('Número del bot con código de país (ej: 51999999999)');
-    const addNumber = String(phoneNumber || '').replace(/\D/g, '');
-    setTimeout(async () => {
-        try {
-            const codeBot = await global.conn.requestPairingCode(addNumber);
-            pairingCard(codeBot?.match(/.{1,4}/g)?.join('-') || codeBot);
-        } catch (e) { console.error(e); }
-    }, 3000);
 }
 
 let messageHandlerMain;
@@ -290,6 +320,7 @@ global.reload = async function (restatConn) {
         global.conn.ev.on('creds.update', newSaveCreds);
         global.conn.isMain = true;
         global.conns.set('main', global.conn);
+        setupPairing(global.conn);
         _isReconnecting = false;
         startingLocks.delete('main');
     }
@@ -319,11 +350,18 @@ global.reload = async function (restatConn) {
     global.conn.ev.removeAllListeners('connection.update');
     global.conn.ev.on('connection.update', async (update) => {
         const { connection, lastDisconnect } = update;
+
+        if (update.qr && typeof global._requestPairing === 'function') {
+            global._requestPairing();
+        }
+
         if (connection === 'close') {
             const reason = new Boom(lastDisconnect?.error)?.output?.statusCode || 0;
-            log.warn(`Desconectado (${reason})`);
+            log.warn(`Desconectado (${reason}) ${lastDisconnect?.error?.message || ''}`);
 
-            if (reason === DisconnectReason.loggedOut || reason === 401 || reason === 403) {
+            const isRegistered = Boolean(global.conn.authState?.creds?.registered);
+
+            if (isRegistered && (reason === DisconnectReason.loggedOut || reason === 401 || reason === 403)) {
                 _authFailedAttempts++;
                 log.fail(`Fallo de autenticación (${_authFailedAttempts}/2)`);
                 if (_authFailedAttempts >= 2) {
@@ -420,7 +458,7 @@ global.reloadModules = async function (check) {
                         for (const cmdKey in possibleGroup.commands) {
                             const cmd = possibleGroup.commands[cmdKey];
                             cmd.category = possibleGroup.category || 'general';
-if (path.relative(modulesDir, filePath).split(path.sep)[0].toLowerCase() === 'prueba') cmd.experimental = true;
+                            if (path.relative(modulesDir, filePath).split(path.sep)[0].toLowerCase() === 'prueba') cmd.experimental = true;
                             global.commands.set(cmd.name, cmd);
                             if (cmd.alias && Array.isArray(cmd.alias)) {
                                 cmd.alias.forEach(a => global.aliases.set(a, cmd.name));

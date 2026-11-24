@@ -79,12 +79,17 @@ async function obtenerAudioTTS(texto) {
     throw new Error("El texto procesado quedó vacío para la lectura.");
   }
 
+  const apiKeyHeader = typeof apikey !== 'undefined' ? apikey : "dix_free";
   const fragmentos = dividirTextoEnFragmentos(textoLimpio, 250);
   const buffers = [];
 
   for (const fragmento of fragmentos) {
     const url = `https://dix.lat/v1/tts?text=${encodeURIComponent(fragmento)}&voice=${vozElegida}`;
-    const response = await fetch(url);
+    const response = await fetch(url, {
+      headers: {
+        'x-api-key': apiKeyHeader
+      }
+    });
 
     if (!response.ok) {
       throw new Error(`Error en API TTS: ${response.status}`);
