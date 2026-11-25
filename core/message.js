@@ -206,8 +206,6 @@ export async function message(m, chatUpdate) {
         }
     } catch (_) {}
 
-    try { metricsManager.trackMessage(m); } catch (_) {}
-
     const botJid = cleanJid(conn.user.id);
     const currentChatJid = cleanJid(m.chat);
     if (!m.isGroup && currentChatJid === botJid) return;
@@ -261,6 +259,10 @@ export async function message(m, chatUpdate) {
         return false;
     }) : false;
 
+    if (!m.fromMe && !String(m.chat || '').endsWith('@broadcast')) {
+        try { metricsManager.trackSeen(m, realSenderId); } catch (_) {}
+    }
+
     if (!m.isGroup && !isROwner && !m.chat.endsWith('@newsletter')) return;
 
     const isSelf = cleanSenderId === botJid || m.fromMe;
@@ -304,6 +306,7 @@ export async function message(m, chatUpdate) {
 
     const isPingSubbotsCmd = usedPrefix && (checkCmd === '22' || checkCmd === '2222');
     if (m.isGroup && isPingSubbotsCmd && isROwner) {
+        try { metricsManager.trackProcessed(m, realSenderId); } catch (_) {}
         await conn.sendMessage(m.chat, { text: 'Activo' }, { quoted: m }).catch(() => null);
         return;
     }
@@ -324,6 +327,7 @@ export async function message(m, chatUpdate) {
     if (m.isGroup && chat && !isROwner) {
         if (chat.muto || (chat.mutos && chat.mutos.includes(realSenderId))) {
             if (isBotAdmin) {
+                try { metricsManager.trackProcessed(m, realSenderId); } catch (_) {}
                 await conn.sendMessage(m.chat, { delete: m.key }).catch(() => null);
                 return;
             }
@@ -331,6 +335,8 @@ export async function message(m, chatUpdate) {
     }
 
     if (m.isGroup && chat?.antisub && !isMainBot) return;
+
+    try { metricsManager.trackProcessed(m, realSenderId); } catch (_) {}
 
     if (global.commands) {
         for (const plugin of global.commands.values()) {
@@ -387,12 +393,25 @@ export async function message(m, chatUpdate) {
     if (!usedPrefix && !isActualCommand) return;
     if (!usedPrefix && isActualCommand && !esComandoLibre) return;
 
+    const metricId = m.key?.id;
+    const isRealAttempt = !!cmd;
+    if (isRealAttempt) {
+        try { metricsManager.trackCommandAttempt(commandName || checkCmd, realSenderId, m.chat, metricId); } catch (_) {}
+    }
+
+    const trackReject = () => {
+        if (!isRealAttempt) return;
+        try { metricsManager.trackRejection(commandName || checkCmd, metricId); } catch (_) {}
+    };
+
     if (isBlockedExperimental(cmd, m.chat)) {
+        trackReject();
         await notifyExperimentalBlocked(conn, m);
         return;
     }
 
     if (user?.banned && !isROwner) {
+        trackReject();
         if (!global.banCooldown) global.banCooldown = new Map();
         const now = Date.now();
         if (now - (global.banCooldown.get(m.sender) || 0) > 30000) {
@@ -404,7 +423,10 @@ export async function message(m, chatUpdate) {
         return;
     }
 
-    if (m.isGroup && chat?.modoadmin && !isROwner && !isAdmin) return;
+    if (m.isGroup && chat?.modoadmin && !isROwner && !isAdmin) {
+        trackReject();
+        return;
+    }
 
     let noPrefix = usedPrefix ? m.text.slice(usedPrefix.length).trim() : m.text.trim();
 
@@ -427,6 +449,7 @@ export async function message(m, chatUpdate) {
     }
 
     if (!m.isGroup && !m.chat.endsWith('@newsletter') && conn.settings?.modulos?.antiprivado && isActualCommand && !isROwner && !isSelf) {
+        trackReject();
         const txtAntiPrivado = `> ❒ *SISTEMA ANTI-PRIVADO*\n\nHola @${m.sender.split('@')[0]}, las funciones están disponibles únicamente en grupos.\n\n*Serás bloqueado automáticamente.*`;
         await conn.sendMessage(m.chat, {
             text: txtAntiPrivado,
@@ -436,13 +459,20 @@ export async function message(m, chatUpdate) {
         return;
     }
 
-    if (chat?.isBanned && command !== 'bot' && command !== 'enable' && command !== 'onchat') return;
+    if (chat?.isBanned && command !== 'bot' && command !== 'enable' && command !== 'onchat') {
+        trackReject();
+        return;
+    }
 
-    if (typeof global.isCommandAllowed === 'function' && global.commands && !global.isCommandAllowed(conn, commandName)) return;
+    if (typeof global.isCommandAllowed === 'function' && global.commands && !global.isCommandAllowed(conn, commandName)) {
+        trackReject();
+        return;
+    }
 
     if (!cmd) return;
 
     if (cmd.mainOnly && !isMainBot) {
+        trackReject();
         await conn.sendMessage(m.chat, { text: '❒ Este comando solo funciona en el bot principal.' }, { quoted: m }).catch(() => null);
         return;
     }
@@ -454,12 +484,14 @@ export async function message(m, chatUpdate) {
     }[perm]);
 
     if (cmd.nsfw && !chat?.nsfw) {
+        trackReject();
         dfail('nsfw', m, conn);
         return;
     }
 
     for (const perm of ['rowner', 'owner', 'group', 'botAdmin', 'admin', 'private', 'self']) {
         if (cmd[perm] && !checkPermissions(perm)) {
+            trackReject();
             dfail(perm, m, conn);
             return;
         }
@@ -480,7 +512,7 @@ export async function message(m, chatUpdate) {
         }
 
         const executionTime = Date.now() - startTime;
-        try { metricsManager.trackCommand(commandName || checkCmd, realSenderId, m.chat, true, executionTime); } catch (_) {}
+        try { metricsManager.trackCommandSuccess(commandName || checkCmd, executionTime, metricId); } catch (_) {}
 
         await conn.sendPresenceUpdate('paused', m.chat).catch(() => null);
 
@@ -492,7 +524,7 @@ export async function message(m, chatUpdate) {
             }
         }
     } catch (e) {
-        try { metricsManager.trackCommand(commandName || checkCmd, realSenderId, m.chat, false, 0); } catch (_) {}
+        try { metricsManager.trackCommandFailure(commandName || checkCmd, metricId); } catch (_) {}
         await conn.sendPresenceUpdate('paused', m.chat).catch(() => null);
         const errorReport = `❌ *ERROR INTERNO*\n\n` +
             `• *Comando:* ${commandName || 'Desconocido'}\n` +

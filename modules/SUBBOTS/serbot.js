@@ -63,7 +63,23 @@ export const serbotCommand = {
                     const i = global.img(conn);
 
                     global.serbotCooldown = global.serbotCooldown || {};
-                    const senderId = m.sender ? jidNormalizedUser(m.sender) : '';
+
+                    let resolvedSender = m.sender;
+                    if (typeof global.getRealJid === 'function') {
+                        try {
+                            const realJid = await global.getRealJid(conn, m.sender, m);
+                            if (realJid) {
+                                resolvedSender = realJid;
+                            }
+                        } catch (jidErr) {
+                            console.error("Error al resolver JID real con global.getRealJid:", jidErr);
+                        }
+                    }
+
+                    const normalizado = resolvedSender ? jidNormalizedUser(resolvedSender) : '';
+                    const senderId = typeof normalizado === 'string'
+                        ? normalizado
+                        : (normalizado && typeof normalizado === 'object' && normalizado.id ? String(normalizado.id) : (typeof resolvedSender === 'string' ? resolvedSender : ''));
                     if (!senderId) return;
 
                     const tiempoActual = Date.now();
@@ -102,7 +118,7 @@ Puedes apoyar realizando una donación o contribución voluntaria para ayudarnos
                     if (m.isGroup) {
                         try {
                             const groupMetadata = await conn.groupMetadata(m.chat);
-                            const participant = groupMetadata?.participants?.find(p => p.id === m.sender || p.lid === m.sender);
+                            const participant = groupMetadata?.participants?.find(p => p.id === m.sender || p.lid === m.sender || p.id === senderId || p.lid === senderId);
                             if (participant?.username) {
                                 hasUsername = true;
                                 usernameVal = participant.username;
@@ -112,7 +128,8 @@ Puedes apoyar realizando una donación o contribución voluntaria para ayudarnos
                         }
                     }
 
-                    const isLid = senderId.endsWith('@lid') || m.sender?.endsWith('@lid');
+                    const senderStr = typeof resolvedSender === 'string' ? resolvedSender : (resolvedSender?.id ? String(resolvedSender.id) : '');
+                    const isLid = (typeof senderId === 'string' && senderId.endsWith('@lid')) || (typeof senderStr === 'string' && senderStr.endsWith('@lid'));
 
                     if (!args[0] && (hasUsername || isLid || usernameVal)) {
                         await m.react('❌');

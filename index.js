@@ -21,6 +21,7 @@ import { printBanner, log, ask, pairingCard, onlineCard } from './src/utils/dix-
 import { ensureApiKey } from './src/utils/apikey.js';
 import { initSerbotBridge, updateMainConn, loadSubBots } from './core/s/serbot-bridge.js';
 import { databaseManager } from './database/db_adapter.js';
+import { metricsManager } from './core/metrics.js';
 
 const startingLocks = new Set();
 
@@ -38,6 +39,7 @@ if (!global.__process_events_initialized) {
                 if (dataArray.length > 0) await databaseManager.saveUsersBulk(dataArray);
             } catch (_) {}
         }
+        try { await metricsManager.flush(); } catch (_) {}
         process.exit(0);
     };
 

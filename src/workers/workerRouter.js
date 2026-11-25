@@ -13,8 +13,8 @@ const num = (v, d) => {
 
 const MAX_BYTES = 15 * 1048576;
 const FETCH_TIMEOUT = 30000;
-const FFMPEG_TIMEOUT = 45000;
-const TOTAL_TIMEOUT = 90000;
+const FFMPEG_TIMEOUT = 40000;
+const TOTAL_TIMEOUT = 15000;
 const TMP_MAX_AGE = 60000;
 const STICKER_FPS = num(process.env.STICKER_FPS, 10);
 const STICKER_SIZE = num(process.env.STICKER_SIZE, 512);
@@ -289,11 +289,45 @@ function injectExif(webp, exif) {
     return out;
 }
 
-async function convertTask(task) {
-    const raw = task.data;
-    let input = ArrayBuffer.isView(raw)
+function asBuffer(raw) {
+    return ArrayBuffer.isView(raw)
         ? Buffer.from(raw.buffer, raw.byteOffset, raw.byteLength)
         : Buffer.from(raw);
+}
+
+async function trayTask(task) {
+    const input = asBuffer(task.data);
+    if (input.length > MAX_BYTES) throw new Error('Archivo demasiado grande (máx 15MB)');
+    if (!input.length) throw new Error('Archivo vacío');
+
+    const size = Math.round(num(task.size, 96));
+    const id = randomBytes(6).toString('hex');
+    const src = join(TMP_DIR, `stk_${id}.in`);
+    const out = join(TMP_DIR, `stk_${id}.png`);
+
+    try {
+        await writeFile(src, input);
+        const vf = [
+            'format=rgba',
+            `scale=${size}:${size}:force_original_aspect_ratio=decrease:flags=bicubic`,
+            `pad=${size}:${size}:(ow-iw)/2:(oh-ih)/2:color=black@0`,
+            'format=rgba'
+        ].join(',');
+        await runFfmpeg([
+            '-hide_banner', '-loglevel', 'error', '-nostdin', '-y',
+            '-i', src, '-map', '0:v:0', '-an', '-sn', '-dn',
+            '-frames:v', '1', '-vf', vf, '-c:v', 'png', '-f', 'image2', out
+        ]);
+        const png = await readFile(out);
+        return { isBuffer: true, data: toTransferable(png) };
+    } finally {
+        await unlink(src).catch(() => {});
+        await unlink(out).catch(() => {});
+    }
+}
+
+async function convertTask(task) {
+    let input = asBuffer(task.data);
 
     if (input.length > MAX_BYTES) throw new Error('Archivo demasiado grande (máx 15MB)');
     if (!input.length) throw new Error('Archivo vacío');
@@ -360,6 +394,7 @@ const handlers = {
     },
     download_file: async (task) => handlers.download_buffer(task),
     convert_sticker: (task) => convertTask(task),
+    convert_tray: (task) => trayTask(task),
     convert_emoji_gif: (task) => convertTask(task),
     convert_brat_or_mix: (task) => convertTask({ ...task, emojis: undefined })
 };

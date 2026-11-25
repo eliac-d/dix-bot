@@ -5,6 +5,11 @@ import { tmpdir } from 'os';
 import { join } from 'path';
 import * as pix from 'pixcore';
 
+const toU8 = (buf) => new Uint8Array(buf.buffer, buf.byteOffset, buf.byteLength);
+
+const isAnimatedWebp = (buf) =>
+    Buffer.isBuffer(buf) && buf.length > 21 && buf.toString('latin1', 12, 16) === 'VP8X' && (buf[20] & 0x02) !== 0;
+
 function hkdf(key, length, info = '') {
     const h = crypto.createHmac('sha256', Buffer.alloc(32)).update(key).digest();
     const infoBuffer = Buffer.from(info);
@@ -135,6 +140,31 @@ async function uploadBuffer(conn, buffer, mediaType) {
     }
 }
 
+async function buildTrayIcon(sourceBuffer, fallbackBuffer) {
+    try {
+        const result = await dispatchMediaTask({
+            type: 'convert_tray',
+            data: toU8(sourceBuffer),
+            size: 96
+        });
+        if (result?.buffer?.length) return result.buffer;
+    } catch (e) {}
+
+    for (const candidate of [sourceBuffer, fallbackBuffer]) {
+        if (!candidate) continue;
+        try {
+            const img = await pix.read(candidate);
+            const png = await img
+                .ensureAlpha()
+                .resize(96, 96, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
+                .png()
+                .toBuffer();
+            if (png?.length) return png;
+        } catch (e) {}
+    }
+    return null;
+}
+
 export const stickerCommand = {
     category: 'sticker',
     commands: {
@@ -207,10 +237,9 @@ export const stickerCommand = {
                         let processedStickers = (await Promise.all(
                             downloadedBuffers.map(async (item) => {
                                 try {
-                                    const uint8Array = new Uint8Array(item.buffer.buffer, item.buffer.byteOffset, item.buffer.byteLength);
                                     let workerResult = await dispatchMediaTask({
                                         type: 'convert_sticker',
-                                        data: uint8Array,
+                                        data: toU8(item.buffer),
                                         packname: pack,
                                         author: auth
                                     });
@@ -235,21 +264,7 @@ export const stickerCommand = {
                             return m.reply('> *⚔ Error al procesar los stickers del álbum.*');
                         }
 
-                        let trayBuffer = await (await pix.read(downloadedBuffers[0].buffer))
-                            .ensureAlpha()
-                            .resize(96, 96, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
-                            .png()
-                            .toBuffer()
-                            .catch(() => null);
-
-                        if (!trayBuffer) {
-                            trayBuffer = await (await pix.read(processedStickers[0]))
-                                .ensureAlpha()
-                                .resize(96, 96, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
-                                .png()
-                                .toBuffer()
-                                .catch(() => null);
-                        }
+                        let trayBuffer = await buildTrayIcon(downloadedBuffers[0].buffer, processedStickers[0]);
 
                         if (!trayBuffer) throw new Error("Error al generar el ícono del paquete.");
 
@@ -262,7 +277,7 @@ export const stickerCommand = {
                             zipFiles.push({ name: fileName, data: processedStickers[i] });
                             stickerMeta.push({
                                 fileName,
-                                isAnimated: false,
+                                isAnimated: isAnimatedWebp(processedStickers[i]),
                                 emojis: ['✨'],
                                 mimetype: 'image/webp',
                                 accessibilityLabel: ''
@@ -333,11 +348,9 @@ export const stickerCommand = {
                     let buffer = await q.download();
                     if (!buffer) return m.reply('> ⚔ Error al descargar.');
 
-                    const uint8Array = new Uint8Array(buffer.buffer, buffer.byteOffset, buffer.byteLength);
-
                     let workerResult = await dispatchMediaTask({
                         type: 'convert_sticker',
-                        data: uint8Array,
+                        data: toU8(buffer),
                         packname: pack,
                         author: auth
                     });
